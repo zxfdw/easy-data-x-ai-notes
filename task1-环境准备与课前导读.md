@@ -14,6 +14,12 @@
 | 课程依赖 | ✅ langchain / openai / langgraph / ragas 等安装完成 |
 | 离线评测 | ✅ **60 条全部通过，Hit@3=1.0，拒答准确率=1.0** |
 
+**实测截图：**
+
+![Task1 离线评测终端截图](screenshots/task1-eval-terminal.png)
+
+**评测报告关键指标：** Hit@1=0.92，Hit@3=1.0，MRR=0.9533，上下文召回率=1.0，拒答准确率=1.0（详见 `code/D3/reports/offline-evaluation.md`）
+
 平台是 WSL 环境；克隆时 GitHub 直连不稳，改用 gh 镜像通道解决。
 
 **如何复现：**
