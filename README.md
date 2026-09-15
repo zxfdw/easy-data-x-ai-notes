@@ -8,7 +8,7 @@
 
 | Task | 主题 | 笔记 | 状态 |
 |:-----|:-----|:-----|:-----|
-| Task 1 | 环境准备与课前导读（F1/F2） | [task1-环境准备与课前导读.md](task1-环境准备与课前导读.md) | 📝 进行中 |
+| Task 1 | 环境准备与课前导读（F1/F2） | [task1-环境准备与课前导读.md](task1-环境准备与课前导读.md) | ✅ 已完成 |
 | Task 2 | P1 场景识别 + D1 RAG 产品设计 + I1 | 待创建 | ⏳ |
 | Task 3 | P2 RAG 产品设计 + I2 向量数据库 | 待创建 | ⏳ |
 | Task 4 | D2 数据层实战 + I3 SQL×AI | 待创建 | ⏳ |
@@ -18,7 +18,6 @@
 | Task 8 | D4 记忆系统开发 + I7 PowerContext | 待创建 | ⏳ |
 | Task 9 | P5 场景识别 + D5 总结 + I8 | 待创建 | ⏳ |
 
-## 📖 引用来源
+## 🖥️ 网页版
 
-- 课程仓库：https://github.com/datawhalechina/easy-data-x-ai
-- 课程在线阅读：https://datawhalechina.github.io/easy-data-x-ai
+- 访问学习手记网页版：https://zxfdw.github.io/easy-data-x-ai-notes/
