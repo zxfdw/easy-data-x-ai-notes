@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="记录每个 Task 的完成情况、任务笔记与阅读笔记。" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <title>Easy Data × AI 学习档案 · 张博</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#note-content">跳到正文</a>
+    <div class="ambient ambient-a" aria-hidden="true"></div>
+    <div class="ambient ambient-b" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="wordmark" href="index.html" aria-label="返回首页顶部">
+        <span class="wordmark-mark" aria-hidden="true">Z</span>
+        <span>Zhang Bo's Study Archive</span>
+      </a>
+      <nav aria-label="主要导航">
+        <a href="index.html#learning-log">学习进度</a>
+        <a href="https://github.com/datawhalechina/easy-data-x-ai" target="_blank" rel="noreferrer">课程仓库 <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="course-intro reveal" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">LEARNING IN PUBLIC · 2026</p>
+          <h1 id="page-title">EASY DATA × AI · TASK LOG</h1>
+          <p class="course-deck">每个 Task 包含一篇任务笔记，以及对应的产品、开发者或产业应用阅读笔记。</p>
+          <p class="course-source"><a href="https://github.com/datawhalechina/easy-data-x-ai" target="_blank" rel="noreferrer">学习内容来自 Datawhale 与 OceanBase 社区联合共建的《Easy Data x AI》。本站用于整理个人任务笔记与阅读随笔，感谢项目维护者与所有开源贡献者。↗</a></p>
+        </div>
+        <div class="course-progress" aria-label="课程学习进度 1/10">
+          <div><span>已完成 Task</span><strong>01 / 10</strong></div>
+          <div class="progress-line"><span style="width: 10%"></span></div>
+          <p>学习周期 2026.09.14 – 10.11，共 29 天</p>
+        </div>
+      </section>
+
+      <section class="log-section" id="learning-log" aria-labelledby="log-title">
+        <h2 class="sr-only" id="log-title">完整学习进度</h2>
+
+        <div class="table-toolbar reveal">
+          <label class="search-field">
+            <span class="sr-only">搜索学习任务</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
+            <input id="log-search" type="search" placeholder="搜索 Task、文章或任务要求" autocomplete="off" />
+          </label>
+          <span class="record-count" aria-live="polite"><b id="visible-count">10</b> 个 Task</span>
+        </div>
+
+        <div class="table-shell reveal">
+          <table>
+            <caption class="sr-only">Task 1 至 Task 9 的学习进度</caption>
+            <thead>
+              <tr>
+                <th scope="col">Task</th>
+                <th scope="col">计划</th>
+                <th scope="col">学习记录</th>
+                <th scope="col">难度</th>
+                <th scope="col">任务与阅读笔记</th>
+              </tr>
+            </thead>
+            <tbody id="log-body">
+                <tr data-search="环境准备与课前导读 完成 Shell、Python、模型 API、Git 环境自检并提交结果；课前导读与公共基础。 F0：课前闲聊 F1：大模型的本质与边界 F2：AI Agent 的完整图景">
+                  <td data-label="Task">
+                    <span class="chapter-code">TASK 1</span>
+                    <strong class="task-name">环境准备与课前导读</strong>
+                  </td>
+                  <td data-label="计划">
+                    <div class="plan-cell">
+                      <strong>2 天</strong>
+                      <span>截止 09-17 03:00</span>
+                    </div>
+                  </td>
+                  <td data-label="学习记录"><time datetime="2026.09.15">2026.09.15</time><span>已完成</span></td>
+                  <td data-label="难度"><span class="difficulty"><span><i></i><i></i><i></i><b></b><b></b></span><em style="font-style:normal">3/5</em></span></td>
+                  <td data-label="任务与阅读笔记">
+                    <div class="note-entry-stack">
+                      <a class="entry-link task-note-link" href="./notes/task-1/"><span>任务笔记</span><b aria-hidden="true">↗</b></a>
+                      <div class="reading-links"><span class="entry-link" style="color:var(--muted);font-weight:400"><span>F0：课前闲聊</span><b aria-hidden="true"></b></span><span class="entry-link" style="color:var(--muted);font-weight:400"><span>F1：大模型的本质与边界</span><b aria-hidden="true"></b></span><span class="entry-link" style="color:var(--muted);font-weight:400"><span>F2：AI Agent 的完整图景</span><b aria-hidden="true"></b></span></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-search="场景识别 + RAG 产品设计 + AI 原生数据系统 获取测试用 API Key；安装向量数据库 pyseekdb 的 SDK；跑通 code/D1 的 d1_1~d1_6 示例代码。 P1：找准 Agent 的用武之地 D1：让 Agent 会查资料 —— RAG 产品设计 I1：AI 原生数据系统">
+                  <td data-label="Task">
+                    <span class="chapter-code">TASK 2</span>
+                    <strong class="task-name">场景识别 + RAG 产品设计 + AI 原生数据系统</strong>
+                  </td>
+                  <td data-label="计划">
+                    <div class="plan-cell">
+                      <strong>3 天</strong>
+                      <span>截止 09-20 03:00</span>
+                    </div>
+                  </td>
+                  <td data-label="学习记录"><time datetime="2026.09.16">2026.09.16</time><span>进行中</span></td>
+                  <td data-label="难度"><span class="unrecorded">未评价</span></td>
+                  <td data-label="任务与阅读笔记">
+                    <div class="note-entry-stack">
+                      <a class="entry-link task-note-link" href="./notes/task-2/"><span>任务笔记</span><b aria-hidden="true">↗</b></a>
+                      <div class="reading-links"><span class="entry-link" style="color:var(--muted);font-weight:400"><span>P1：找准 Agent 的用武之地</span><b aria-hidden="true"></b></span><span class="entry-link" style="color:var(--muted);font-weight:400"><span>D1：让 Agent 会查资料 —— RAG 产品设计</span><b aria-hidden="true"></b></span><span class="entry-link" style="color:var(--muted);font-weight:400"><span>I1：AI 原生数据系统</span><b aria-hidden="true"></b></span></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="locked" data-search="RAG 产品设计 + RAG 与向量数据库 了解 RAG 的基础流程与向量数据库混合搜索含义；跑通 code/D2 的 d2_1~d2_2。 P2：让 Agent 会查资料 —— RAG 产品设计 I2：RAG 与向量数据库">
+                  <td data-label="Task">
+                    <span class="chapter-code">TASK 3</span>
+                    <strong class="task-name">RAG 产品设计 + RAG 与向量数据库</strong>
+                  </td>
+                  <td data-label="计划">
+                    <div class="plan-cell">
+                      <strong>3 天</strong>
+                      <span>截止 09-23 03:00</span>
+                    </div>
+                  </td>
+                  <td data-label="学习记录"><span class="unrecorded">未记录</span><span>待开始</span></td>
+                  <td data-label="难度"><span class="unrecorded">未评价</span></td>
+                  <td data-label="任务与阅读笔记">
+                    <div class="note-entry-stack">
+                      <span class="entry-link locked-entry"><span>任务笔记</span><b aria-hidden="true">🔒</b></span>
+                      <div class="reading-links"><span class="entry-link locked-entry"><span>P2：让 Agent 会查资料 —— RAG 产品设计</span><b aria-hidden="true">🔒</b></span><span class="entry-link locked-entry"><span>I2：RAG 与向量数据库</span><b aria-hidden="true">🔒</b></span></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="locked" data-search="AI Native 数据层与 AI Functions 跑通 code/D2 的 d2_1~d2_5；通过 pyseekdb 执行 AI Function。 D2：统一 AI Native 数据层实战 I3：SQL × AI —— AI Functions 的设计与执行">
+                  <td data-label="Task">
+                    <span class="chapter-code">TASK 4</span>
+                    <strong class="task-name">AI Native 数据层与 AI Functions</strong>
+                  </td>
+                  <td data-label="计划">
+                    <div class="plan-cell">
+                      <strong>3 天</strong>
+                      <span>截止 09-26 03:00</span>
+                    </div>
+                  </td>
+                  <td data-label="学习记录"><span class="unrecorded">未记录</span><span>待开始</span></td>
+                  <td data-label="难度"><span class="unrecorded">未评价</span></td>
+                  <td data-label="任务与阅读笔记">
+                    <div class="note-entry-stack">
+                      <span class="entry-link locked-entry"><span>任务笔记</span><b aria-hidden="true">🔒</b></span>
+                      <div class="reading-links"><span class="entry-link locked-entry"><span>D2：统一 AI Native 数据层实战</span><b aria-hidden="true">🔒</b></span><span class="entry-link locked-entry"><span>I3：SQL × AI —— AI Functions 的设计与执行</span><b aria-hidden="true">🔒</b></span></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="locked" data-search="记忆系统与 File SQL 理解记忆系统原理，安装 PowerContext 并体验；完成 select from read_csv(xxx.csv) 流程。 P3：让 Agent 真正记住你 —— 记忆系统设计 I4：File SQL for AI Agent">
+                  <td data-label="Task">
+                    <span class="chapter-code">TASK 5</span>
+                    <strong class="task-name">记忆系统与 File SQL</strong>
+                  </td>
+                  <td data-label="计划">
+                    <div class="plan-cell">
+                      <strong>3 天</strong>
+                      <span>截止 09-29 03:00</span>
+                    </div>
+                  </td>
+                  <td data-label="学习记录"><span class="unrecorded">未记录</span><span>待开始</span></td>
+                  <td data-label="难度"><span class="unrecorded">未评价</span></td>
+                  <td data-label="任务与阅读笔记">
+                    <div class="note-entry-stack">
+                      <span class="entry-link locked-entry"><span>任务笔记</span><b aria-hidden="true">🔒</b></span>
+                      <div class="reading-links"><span class="entry-link locked-entry"><span>P3：让 Agent 真正记住你 —— 记忆系统设计</span><b aria-hidden="true">🔒</b></span><span class="entry-link locked-entry"><span>I4：File SQL for AI Agent</span><b aria-hidden="true">🔒</b></span></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="locked" data-search="Agentic RAG 与 AI 列 跑通 code/D3 的 d3_1~d3_6；在 pyseekdb 创建并使用 AI 列。 D3：实践出真知 —— Agentic RAG 实战 I5：AI 列 —— 模型驱动派生数据的自动维护">
+                  <td data-label="Task">
+                    <span class="chapter-code">TASK 6</span>
+                    <strong class="task-name">Agentic RAG 与 AI 列</strong>
+                  </td>
+                  <td data-label="计划">
+                    <div class="plan-cell">
+                      <strong>3 天</strong>
+                      <span>截止 10-02 03:00</span>
+                    </div>
+                  </td>
+                  <td data-label="学习记录"><span class="unrecorded">未记录</span><span>待开始</span></td>
+                  <td data-label="难度"><span class="unrecorded">未评价</span></td>
+                  <td data-label="任务与阅读笔记">
+                    <div class="note-entry-stack">
+                      <span class="entry-link locked-entry"><span>任务笔记</span><b aria-hidden="true">🔒</b></span>
+                      <div class="reading-links"><span class="entry-link locked-entry"><span>D3：实践出真知 —— Agentic RAG 实战</span><b aria-hidden="true">🔒</b></span><span class="entry-link locked-entry"><span>I5：AI 列 —— 模型驱动派生数据的自动维护</span><b aria-hidden="true">🔒</b></span></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="locked" data-search="Skill 与上下文工程 理解上下文工程核心概念；基于 MCP / Skills / Agent Plugins 实践，以 PowerContext 为例完成安装与调用。 P4：Skill 与 Agent 知识管理 I6：上下文工程概述">
+                  <td data-label="Task">
+                    <span class="chapter-code">TASK 7</span>
+                    <strong class="task-name">Skill 与上下文工程</strong>
+                  </td>
+                  <td data-label="计划">
+                    <div class="plan-cell">
+                      <strong>3 天</strong>
+                      <span>截止 10-05 03:00</span>
+                    </div>
+                  </td>
+                  <td data-label="学习记录"><span class="unrecorded">未记录</span><span>待开始</span></td>
+                  <td data-label="难度"><span class="unrecorded">未评价</span></td>
+                  <td data-label="任务与阅读笔记">
+                    <div class="note-entry-stack">
+                      <span class="entry-link locked-entry"><span>任务笔记</span><b aria-hidden="true">🔒</b></span>
+                      <div class="reading-links"><span class="entry-link locked-entry"><span>P4：Skill 与 Agent 知识管理</span><b aria-hidden="true">🔒</b></span><span class="entry-link locked-entry"><span>I6：上下文工程概述</span><b aria-hidden="true">🔒</b></span></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="locked" data-search="Agent 记忆与 PowerContext 跑通 code/D4 的 d4_1~d4_4；学习 PowerContext 项目设计。 D4：记哪些、忘哪些？—— Agent 记忆系统开发 I7：PowerContext 的设计与实现">
+                  <td data-label="Task">
+                    <span class="chapter-code">TASK 8</span>
+                    <strong class="task-name">Agent 记忆与 PowerContext</strong>
+                  </td>
+                  <td data-label="计划">
+                    <div class="plan-cell">
+                      <strong>3 天</strong>
+                      <span>截止 10-08 03:00</span>
+                    </div>
+                  </td>
+                  <td data-label="学习记录"><span class="unrecorded">未记录</span><span>待开始</span></td>
+                  <td data-label="难度"><span class="unrecorded">未评价</span></td>
+                  <td data-label="任务与阅读笔记">
+                    <div class="note-entry-stack">
+                      <span class="entry-link locked-entry"><span>任务笔记</span><b aria-hidden="true">🔒</b></span>
+                      <div class="reading-links"><span class="entry-link locked-entry"><span>D4：记哪些、忘哪些？—— Agent 记忆系统开发</span><b aria-hidden="true">🔒</b></span><span class="entry-link locked-entry"><span>I7：PowerContext 的设计与实现</span><b aria-hidden="true">🔒</b></span></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="locked" data-search="场景、总结与测评 了解上下文工程的场景应用与测评方法；用 PowerContext E2E 基于 Harbor 构建与迁移测评集。 P5：Agent 场景识别 D5：课程总结 I8：案例场景和测评构建">
+                  <td data-label="Task">
+                    <span class="chapter-code">TASK 9</span>
+                    <strong class="task-name">场景、总结与测评</strong>
+                  </td>
+                  <td data-label="计划">
+                    <div class="plan-cell">
+                      <strong>3 天</strong>
+                      <span>截止 10-11 03:00</span>
+                    </div>
+                  </td>
+                  <td data-label="学习记录"><span class="unrecorded">未记录</span><span>待开始</span></td>
+                  <td data-label="难度"><span class="unrecorded">未评价</span></td>
+                  <td data-label="任务与阅读笔记">
+                    <div class="note-entry-stack">
+                      <span class="entry-link locked-entry"><span>任务笔记</span><b aria-hidden="true">🔒</b></span>
+                      <div class="reading-links"><span class="entry-link locked-entry"><span>P5：Agent 场景识别</span><b aria-hidden="true">🔒</b></span><span class="entry-link locked-entry"><span>D5：课程总结</span><b aria-hidden="true">🔒</b></span><span class="entry-link locked-entry"><span>I8：案例场景和测评构建</span><b aria-hidden="true">🔒</b></span></div>
+                    </div>
+                  </td>
+                </tr>
+              <tr hidden></tr>
+            </tbody>
+          </table>
+          <p class="empty-state" id="empty-state" hidden>没有匹配的 Task。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Easy Data × AI 学习档案 · 张博</p>
+      <p>内容整理自 Datawhale × OceanBase《Easy Data × AI》课程</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="完成环境自检与离线评测，并读完公共基础三篇（F0/F1/F2），建立「数据视角看 Agent」的认知框架。" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <title>环境准备与课前导读 · Easy Data × AI 学习档案</title>
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#note-content">跳到正文</a>
+    <div class="ambient ambient-a" aria-hidden="true"></div>
+    <div class="ambient ambient-b" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="wordmark" href="../../index.html" aria-label="返回首页顶部">
+        <span class="wordmark-mark" aria-hidden="true">Z</span>
+        <span>Zhang Bo's Study Archive</span>
+      </a>
+      <nav aria-label="主要导航">
+        <a href="../../index.html#learning-log">学习进度</a>
+        <a href="https://github.com/datawhalechina/easy-data-x-ai" target="_blank" rel="noreferrer">课程仓库 <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <main class="note-layout" id="note-content">
+      <aside class="chapter-rail reveal">
+        <a class="back-link" href="../../index.html#learning-log">← 返回进度</a>
+        <p class="eyebrow">TASK MAP</p>
+        <nav class="chapter-list" aria-label="全部学习任务与阅读笔记">
+      <details class="task-tree" open>
+        <summary class="active-task">
+          <span>TASK 1</span>
+          <strong>环境准备与课前导读</strong>
+          <i aria-hidden="true"></i>
+        </summary>
+        <div class="task-tree-children">
+          <a class="tree-note current" href="../task-1/"><span>任务笔记</span><b aria-hidden="true">↗</b></a>
+<span class="tree-reading current"><span>F0：课前闲聊</span><i aria-hidden="true"></i></span>
+<span class="tree-reading current"><span>F1：大模型的本质与边界</span><i aria-hidden="true"></i></span>
+<span class="tree-reading current"><span>F2：AI Agent 的完整图景</span><i aria-hidden="true"></i></span>
+        </div>
+      </details>
+      <details class="task-tree" >
+        <summary class="">
+          <span>TASK 2</span>
+          <strong>场景识别 + RAG 产品设计 + AI 原生数据系统</strong>
+          <i aria-hidden="true"></i>
+        </summary>
+        <div class="task-tree-children">
+          <a class="tree-note " href="../task-2/"><span>任务笔记</span><b aria-hidden="true">↗</b></a>
+<span class="tree-reading "><span>P1：找准 Agent 的用武之地</span><i aria-hidden="true"></i></span>
+<span class="tree-reading "><span>D1：让 Agent 会查资料 —— RAG 产品设计</span><i aria-hidden="true"></i></span>
+<span class="tree-reading "><span>I1：AI 原生数据系统</span><i aria-hidden="true"></i></span>
+        </div>
+      </details>
+      <details class="task-tree" >
+        <summary class="">
+          <span>TASK 3</span>
+          <strong>RAG 产品设计 + RAG 与向量数据库</strong>
+          <i aria-hidden="true"></i>
+        </summary>
+        <div class="task-tree-children">
+          <a class="tree-note locked" href="#"><span>任务笔记</span><b aria-hidden="true">🔒</b></a>
+<span class="tree-reading locked"><span>P2：让 Agent 会查资料 —— RAG 产品设计</span><i aria-hidden="true"></i></span>
+<span class="tree-reading locked"><span>I2：RAG 与向量数据库</span><i aria-hidden="true"></i></span>
+        </div>
+      </details>
+      <details class="task-tree" >
+        <summary class="">
+          <span>TASK 4</span>
+          <strong>AI Native 数据层与 AI Functions</strong>
+          <i aria-hidden="true"></i>
+        </summary>
+        <div class="task-tree-children">
+          <a class="tree-note locked" href="#"><span>任务笔记</span><b aria-hidden="true">🔒</b></a>
+<span class="tree-reading locked"><span>D2：统一 AI Native 数据层实战</span><i aria-hidden="true"></i></span>
+<span class="tree-reading locked"><span>I3：SQL × AI —— AI Functions 的设计与执行</span><i aria-hidden="true"></i></span>
+        </div>
+      </details>
+      <details class="task-tree" >
+        <summary class="">
+          <span>TASK 5</span>
+          <strong>记忆系统与 File SQL</strong>
+          <i aria-hidden="true"></i>
+        </summary>
+        <div class="task-tree-children">
+          <a class="tree-note locked" href="#"><span>任务笔记</span><b aria-hidden="true">🔒</b></a>
+<span class="tree-reading locked"><span>P3：让 Agent 真正记住你 —— 记忆系统设计</span><i aria-hidden="true"></i></span>
+<span class="tree-reading locked"><span>I4：File SQL for AI Agent</span><i aria-hidden="true"></i></span>
+        </div>
+      </details>
+      <details class="task-tree" >
+        <summary class="">
+          <span>TASK 6</span>
+          <strong>Agentic RAG 与 AI 列</strong>
+          <i aria-hidden="true"></i>
+        </summary>
+        <div class="task-tree-children">
+          <a class="tree-note locked" href="#"><span>任务笔记</span><b aria-hidden="true">🔒</b></a>
+<span class="tree-reading locked"><span>D3：实践出真知 —— Agentic RAG 实战</span><i aria-hidden="true"></i></span>
+<span class="tree-reading locked"><span>I5：AI 列 —— 模型驱动派生数据的自动维护</span><i aria-hidden="true"></i></span>
+        </div>
+      </details>
+      <details class="task-tree" >
+        <summary class="">
+          <span>TASK 7</span>
+          <strong>Skill 与上下文工程</strong>
+          <i aria-hidden="true"></i>
+        </summary>
+        <div class="task-tree-children">
+          <a class="tree-note locked" href="#"><span>任务笔记</span><b aria-hidden="true">🔒</b></a>
+<span class="tree-reading locked"><span>P4：Skill 与 Agent 知识管理</span><i aria-hidden="true"></i></span>
+<span class="tree-reading locked"><span>I6：上下文工程概述</span><i aria-hidden="true"></i></span>
+        </div>
+      </details>
+      <details class="task-tree" >
+        <summary class="">
+          <span>TASK 8</span>
+          <strong>Agent 记忆与 PowerContext</strong>
+          <i aria-hidden="true"></i>
+        </summary>
+        <div class="task-tree-children">
+          <a class="tree-note locked" href="#"><span>任务笔记</span><b aria-hidden="true">🔒</b></a>
+<span class="tree-reading locked"><span>D4：记哪些、忘哪些？—— Agent 记忆系统开发</span><i aria-hidden="true"></i></span>
+<span class="tree-reading locked"><span>I7：PowerContext 的设计与实现</span><i aria-hidden="true"></i></span>
+        </div>
+      </details>
+      <details class="task-tree" >
+        <summary class="">
+          <span>TASK 9</span>
+          <strong>场景、总结与测评</strong>
+          <i aria-hidden="true"></i>
+        </summary>
+        <div class="task-tree-children">
+          <a class="tree-note locked" href="#"><span>任务笔记</span><b aria-hidden="true">🔒</b></a>
+<span class="tree-reading locked"><span>P5：Agent 场景识别</span><i aria-hidden="true"></i></span>
+<span class="tree-reading locked"><span>D5：课程总结</span><i aria-hidden="true"></i></span>
+<span class="tree-reading locked"><span>I8：案例场景和测评构建</span><i aria-hidden="true"></i></span>
+        </div>
+      </details>
+        </nav>
+      </aside>
+
+      <article class="note-article">
+        <header class="note-title reveal">
+          <p>TASK 1 · 学习笔记</p>
+          <h1>环境准备与课前导读</h1>
+          <p class="note-deck">完成环境自检与离线评测，并读完公共基础三篇（F0/F1/F2），建立「数据视角看 Agent」的认知框架。</p>
+          <dl class="note-facts">
+            <div><dt>计划</dt><dd>2 天</dd></div>
+            <div><dt>截止</dt><dd>09-17 03:00</dd></div>
+            <div><dt>状态</dt><dd>已完成</dd></div>
+            <div><dt>更新</dt><dd>2026.09.15</dd></div>
+          </dl>
+        </header>
+
+        <section class="task-brief reveal">
+          <p class="section-index">00</p>
+          <div>
+            <h2>任务要求</h2>
+            <p>完成 Shell、Python、模型 API、Git 环境自检并提交结果；课前导读与公共基础。</p>
+            <p class="task-scope"><span>F0：课前闲聊</span><span>F1：大模型的本质与边界</span><span>F2：AI Agent 的完整图景</span></p>
+          </div>
+        </section>
+
+        <section class="reflection-section reveal">
+          <p class="section-index">01</p>
+          <div class="note-body">
+<blockquote>⏰ 截止时间：2026-09-17 03:00（✅ 2026-09-15 完成） 📖 阅读内容：F0 课前闲聊 + F1《大模型的本质与边界》+ F2《AI Agent 完整图景》</blockquote>
+<h2>01 实践成果</h2>
+<h3>环境搭建（2026-09-14）</h3>
+<table><thead><tr><th>项目</th><th>结果</th></tr></thead><tbody><tr><td>课程仓库</td><td>✅ 克隆 <code>easy-data-x-ai</code></td></tr><tr><td>Python 虚拟环境</td><td>✅ Python 3.12.3（独立 .venv，不动系统）</td></tr><tr><td>课程依赖</td><td>✅ langchain / openai / langgraph / ragas 等安装完成</td></tr><tr><td>离线评测</td><td>✅ <strong>60 条全部通过，Hit@3=1.0，拒答准确率=1.0</strong></td></tr></tbody></table>
+<p><strong>实测截图：</strong></p>
+<p><img src="../../screenshots/task1-eval-terminal.png" alt="Task1 离线评测终端截图" loading="lazy"></p>
+<p><strong>评测报告关键指标：</strong> Hit@1=0.92，Hit@3=1.0，MRR=0.9533，上下文召回率=1.0，拒答准确率=1.0（详见 <code>code/D3/reports/offline-evaluation.md</code>）</p>
+<p>平台是 WSL 环境；克隆时 GitHub 直连不稳，改用 gh 镜像通道解决。</p>
+<p><strong>如何复现：</strong></p>
+<pre><code>git clone https://github.com/datawhalechina/easy-data-x-ai.git
+cd easy-data-x-ai
+python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+pip install -r code/requirements-test.txt
+PYTHONPATH=code/D3:code python code/D3/d3_5_evaluate.py</code></pre>
+<h2>02 学习心得（张博本人理解）</h2>
+<p>这次导读我最大的感触是：<strong>用系统思维来看 Agent、RAG、Memory、Skill、MCP 这些东西。</strong></p>
+<p>一开始看上去它们好像是各种不同的名词和功能，各管一摊子事。但读完后发现，<strong>它们的核心都是数据</strong>——只是数据在 Agent 生命周期的不同环节被不同方式使用：</p>
+<ul><li><strong>RAG</strong>：把外部知识变成模型能用的上下文</li><li><strong>Memory</strong>：把历史交互沉淀成可检索的记忆</li><li><strong>Skill</strong>：把可复用的经验/流程标准化</li><li><strong>MCP</strong>：把外部工具和数据的接口统一起来</li></ul>
+<p>如果用一句话概括，我得到的一个认知是：</p>
+<blockquote><strong>Agent 的能力 = 模型能力 × 数据质量 + 流程编排</strong></blockquote>
+<p>这个公式帮我理解了：为什么同样一个模型（比如同样的 LLM API），在不同场景下表现差异巨大——因为<strong>数据质量</strong>（喂进去什么）和<strong>流程编排</strong>（怎么组织多步调用）才是拉开差距的地方。反过来说，想让 Agent 能力最大化，重点不是换更强的模型，而是<strong>把数据管好、把流程设计好</strong>。</p>
+<p>另外 F1 里对大模型"本质与边界"的梳理（幻觉、知识截止、上下文窗口等）也让我对"模型不是万能的"有了更具体的认识——知道边界在哪，才知道数据层和流程层该补什么。</p>
+<h2>📖 引用来源</h2>
+<ul><li>课程仓库：https://github.com/datawhalechina/easy-data-x-ai</li><li>课程在线阅读：https://datawhalechina.github.io/easy-data-x-ai</li></ul>
+          </div>
+        </section>
+
+        <footer class="note-footer">
+          <span style="color:var(--faint)">← 上一课</span>
+          <a href="../../index.html#learning-log">全部 Task ↑</a>
+          <a href="../task-2/">TASK 2 →</a>
+        </footer>
+      </article>
+    </main>
+
+    <footer>
+      <p>Easy Data × AI 学习档案 · 张博</p>
+      <p>内容整理自 Datawhale × OceanBase《Easy Data × AI》课程</p>
+    </footer>
+  </body>
+</html>
