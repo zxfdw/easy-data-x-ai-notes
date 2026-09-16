@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>速查表 · 症状 → 数据缺口</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="wrap ref-body">
+
+  <header class="lesson-head">
+    <p class="kicker">速查表 · 可打印（对应 F1 / F2）</p>
+    <h1>症状 → 数据缺口</h1>
+    <p class="objective">AI 不好用时，先别换模型。查这张表找缺哪种数据。</p>
+  </header>
+
+  <section>
+    <h2>先问一句</h2>
+    <div class="note">
+      <p><strong>大模型只有训练数据，没有你的数据。</strong><br>
+      所以"AI 不好用"的第一反应不该是换更强的模型，而是问：<strong>它缺的是哪种数据？</strong></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>症状对照表</h2>
+    <table>
+      <thead><tr><th>你看到的症状</th><th>缺的数据</th><th>该补什么</th></tr></thead>
+      <tbody>
+        <tr><td>答得流畅，但细节是错的</td><td>可验证的事实数据</td><td>可检索的知识库（RAG）</td></tr>
+        <tr><td>说"我不知道"，或给的是旧信息</td><td>实时数据</td><td>接入会持续更新的数据源</td></tr>
+        <tr><td>答案正确，但跟我没关系</td><td>用户 / 业务数据</td><td>记忆系统（Memory）</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>四个热词的数据本质</h2>
+    <table>
+      <thead><tr><th>能力</th><th>数据本质</th><th>效果取决于</th></tr></thead>
+      <tbody>
+        <tr><td>RAG</td><td>知识数据的检索</td><td>知识库数据质量 + 检索策略</td></tr>
+        <tr><td>MCP</td><td>数据接入的标准化</td><td>数据接口的标准化程度</td></tr>
+        <tr><td>Skill</td><td>经验数据的结构化</td><td>技能的结构化程度 + 可检索性</td></tr>
+        <tr><td>Memory</td><td>数据的积累与召回</td><td>记忆数据的提炼质量 + 召回策略</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>两句话</h2>
+    <dl>
+      <dt>AI 的能力上限 = 数据质量 × 模型能力</dt>
+      <dd>换模型是乘法的一项，补数据是另一项；当数据为 0，模型再强也是 0。</dd>
+      <dt>模型决定能"想多好"，数据决定能"做多好"</dt>
+      <dd>遇到新概念先问：它在数据层面解决什么问题？答案通常就清楚了。</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Agent 的运行形态（F2）</h2>
+    <pre><code>传统对话：用户输入 → 模型生成 → 返回结果        （单次）
+
+Agent：  推理 → 行动 → 观察 → 继续推理 …        （循环）
+
+四个组件：LLM（大脑）/ Planning（规划）/ Memory（记忆）/ Tool Use（工具）</code></pre>
+  </section>
+
+  <footer class="lesson-foot">
+    <p style="font-family:var(--sans);font-size:0.9rem;color:var(--muted)">
+      出自 <a href="../lessons/0001-three-symptoms-one-root-cause.html">第 1 课</a> ｜ 原始材料：课程讲义 F1、F2
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
