@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>速查表 · Agent 循环</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="wrap ref-body">
+
+  <header class="lesson-head">
+    <p class="kicker">速查表 · 可打印</p>
+    <h1>Agent 循环</h1>
+    <p class="objective">一页看完：循环怎么转、每圈消息怎么变、什么时候停。</p>
+  </header>
+
+  <section>
+    <h2>一句话</h2>
+    <p>把"模型要求调工具"和"工具返回结果"交替追加进同一份消息列表，直到模型输出里<strong>不再有</strong> <code>tool_calls</code>。</p>
+  </section>
+
+  <section>
+    <h2>状态机</h2>
+<pre><code>        ┌─────────────────────────────────────────┐
+        │  发 messages 给模型                      │
+        └────────────────┬────────────────────────┘
+                         ↓
+              ┌──────────────────────┐
+              │ 输出里有 tool_calls？ │
+              └───────┬──────┬───────┘
+                   有 │      │ 没有
+                      ↓      ↓
+        ┌──────────────────┐  ┌──────────────────┐
+        │ 执行工具          │  │ 这是最终回答      │
+        │ 把结果追加到      │  │ 循环结束          │
+        │ messages          │  └──────────────────┘
+        └────────┬─────────┘
+                 └──────→ 回到开头</code></pre>
+    <p><span class="ref-badge">保险丝</span><code>max_rounds</code> 只是防跑飞的次数上限，<strong>不是</strong>循环条件。</p>
+  </section>
+
+  <section>
+    <h2>每圈消息列表的变化</h2>
+    <table>
+      <thead><tr><th>圈</th><th>消息列表内容</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><code>[system, user]</code></td></tr>
+        <tr><td>2</td><td><code>[system, user, assistant(tool_calls), tool(result)]</code></td></tr>
+        <tr><td>3</td><td>上面 <strong>+</strong> <code>[assistant(tool_calls), tool(result)]</code></td></tr>
+        <tr><td>n</td><td>…持续追加，直到 <code>assistant</code> 不再带 <code>tool_calls</code></td></tr>
+      </tbody>
+    </table>
+    <p>模型没有"记忆"：它每圈看到的都是<strong>重新发过去的完整历史</strong>。</p>
+  </section>
+
+  <section>
+    <h2>三个角色</h2>
+    <dl>
+      <dt>assistant（带 tool_calls）</dt>
+      <dd>模型要求调用某个工具，附带参数（JSON）。这一步<strong>不产生答案</strong>，只产生意图。</dd>
+      <dt>tool / function（结果）</dt>
+      <dd>程序真正执行工具后，把返回值作为一条消息贴回去。模型只能通过这条消息"看到"外部世界。</dd>
+      <dt>assistant（不带 tool_calls）</dt>
+      <dd>模型的最终回答。循环的出口。</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>常见坑</h2>
+    <ul>
+      <li><strong>忘了回传结果</strong>：模型会一直重复调同一个工具，因为它永远看不到反馈。</li>
+      <li><strong>回传格式不对</strong>：工具结果必须带对应的 <code>tool_call_id</code>，否则模型会认为"这结果不是我要的"。</li>
+      <li><strong>没设上限</strong>：模型陷入反复查询时会烧掉大量 token。</li>
+      <li><strong>把 <code>max_rounds</code> 当循环条件</strong>：写成"必须转满 N 圈"，逻辑就反了。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>对应到课程代码</h2>
+    <table>
+      <thead><tr><th>示例</th><th>循环由谁实现</th></tr></thead>
+      <tbody>
+        <tr><td><code>d1_4_tool_use_mock.py</code></td><td>手写循环：<code>tool_call_loop.py</code>，看得见每一圈</td></tr>
+        <tr><td><code>d1_5_tool_use_seekdb.py</code></td><td>同上，工具换成真实 seekdb 检索</td></tr>
+        <tr><td><code>d1_6_agent.py</code></td><td>框架托管（<code>create_agent</code>），骨架相同，输出里能看到 <code>[行动]/[观察]</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer class="lesson-foot">
+    <p style="font-family:var(--sans);font-size:0.9rem;color:var(--muted)">
+      出自 <a href="../lessons/0002-agent-loop-anatomy.html">第 2 课</a> ｜ 工作区 <code>life/AI与学习/学习项目/Easy Data × AI/</code>
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
