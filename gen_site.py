@@ -15,12 +15,14 @@ TASKS = [
          plan=("2 天", "09-17 03:00"), record="2026.09.15", status="已完成",
          diff=3,
          read=["F0 课前闲聊", "F1 大模型的本质与边界", "F2 AI Agent 的完整图景"],
+         lesson=("第 1 课", "lessons/0001-three-symptoms-one-root-cause.html", "三个毛病，一个根因"),
          deck="完成环境自检与离线评测，读完公共基础三篇，建立「从数据看 Agent」的认知框架。",
          req="完成 Shell、Python、模型 API、Git 环境自检并提交结果；完成课前导读与公共基础阅读。"),
     dict(no="02", code="TASK 2", slug="task-2", name="场景识别与 RAG 产品设计",
          plan=("3 天", "09-20 03:00"), record="2026.09.16", status="进行中",
          diff=None,
          read=["P1 找准 Agent 的用武之地", "D1 让 Agent 会查资料", "I1 AI 原生数据系统"],
+         lesson=("第 2 课", "lessons/0002-agent-loop-anatomy.html", "Agent 循环：模型每一圈看到了什么"),
          deck="配好测试 API Key、装好 pyseekdb，并把 code/D1 的六个示例全部跑通，走完从一次调用到 Agent 循环的演进。",
          req="获取测试用 API Key；安装向量数据库 pyseekdb 的 SDK；跑通 code/D1 的 d1_1 至 d1_6 示例代码。"),
     dict(no="03", code="TASK 3", slug="task-3", name="RAG 产品设计与向量数据库",
@@ -194,13 +196,21 @@ def build_index():
     for t in TASKS:
         locked = t['status'] == '待开始'
         cls = ' class="is-locked"' if locked else ''
+        lesson = t.get('lesson')
         if locked:
+            lesson_html = ''
             note = '<span class="entry is-locked"><span>任务笔记</span><b aria-hidden="true">未开始</b></span>'
             reads = ''.join(f'<span class="entry"><span>{html.escape(r)}</span><b aria-hidden="true"></b></span>' for r in t['read'])
         else:
+            if lesson:
+                lesson_html = (f'<a class="entry" href="./{lesson[1]}"><span>{lesson[0]} · {html.escape(lesson[2])}</span>'
+                               f'<b aria-hidden="true">↗</b></a>')
+            else:
+                lesson_html = ''
             note = f'<a class="entry" href="./notes/{t["slug"]}/"><span>任务笔记</span><b aria-hidden="true">↗</b></a>'
             reads = ''.join(f'<span class="entry"><span>{html.escape(r)}</span><b aria-hidden="true"></b></span>' for r in t['read'])
-        search = html.escape(f"{t['name']} {t['req']} {' '.join(t['read'])} {t['status']}", quote=True)
+        lesson_txt = f"{lesson[0]} {lesson[2]}" if t.get('lesson') else ''
+        search = html.escape(f"{t['name']} {t['req']} {' '.join(t['read'])} {t['status']} {lesson_txt}", quote=True)
         if t['record']:
             rec = f'<span class="cell-date">{t["record"]}</span><span class="cell-sub">{t["status"]}</span>'
         else:
@@ -217,6 +227,7 @@ def build_index():
                 <td data-label="难度">{pips(t['diff'])}</td>
                 <td data-label="笔记">
                   {note}
+                  {lesson_html}
                   <span class="entry-group">{reads}</span>
                 </td>
               </tr>""")
@@ -224,12 +235,12 @@ def build_index():
     done = sum(1 for t in TASKS if t['status'] == '已完成')
     active = sum(1 for t in TASKS if t['status'] == '进行中')
     pct = round(done / len(TASKS) * 100)
-    return page_head('', 'Easy Data × AI 学习档案 · 张博', '按 Task 记录实践成果与学习笔记。') + header('') + f"""
+    return page_head('', 'Easy Data × AI 学习档案 · 张博', '按 Task 记录实践成果、学习笔记与对应讲义。') + header('') + f"""
     <main id="content">
       <section class="intro">
         <div>
           <h1>Easy Data × AI 学习档案</h1>
-          <p class="intro-lede">每个 Task 一篇任务笔记：做到哪一步、跑出什么结果、想明白了什么。九个 Task，从环境准备走到 Agent 记忆系统。</p>
+          <p class="intro-lede">每个 Task 一行：计划、进度、难度，以及对应的任务笔记与课程讲义。九个 Task，从环境准备走到 Agent 记忆系统。</p>
           <p class="intro-src">课程内容来自 Datawhale 与 OceanBase 社区共建的 <a href="https://github.com/datawhalechina/easy-data-x-ai" target="_blank" rel="noreferrer">easy-data-x-ai</a> 开源项目，本站整理个人任务笔记与阅读记录。</p>
         </div>
         <div class="intro-facts">
@@ -275,40 +286,7 @@ def build_index():
         </div>
       </section>
 
-      <section class="ledger" id="lessons" aria-labelledby="lessons-title">
-        <div class="ledger-head">
-          <h2 id="lessons-title">课程讲义</h2>
-          <span class="record-count">按课程 Task 次序编排</span>
-        </div>
-        <div class="ledger-table">
-          <table>
-            <caption class="sr-only">课程讲义与速查表</caption>
-            <thead>
-              <tr>
-                <th scope="col">课次</th>
-                <th scope="col">对应</th>
-                <th scope="col">主题</th>
-                <th scope="col">速查表</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td data-label="课次"><a class="entry" href="./lessons/0001-three-symptoms-one-root-cause.html"><span>第 1 课</span><b aria-hidden="true">↗</b></a></td>
-                <td data-label="对应"><span class="cell-date">Task 1</span><span class="cell-sub">F1 / F2</span></td>
-                <td data-label="主题"><span class="task-name">三个毛病，一个根因</span></td>
-                <td data-label="速查表"><a class="entry" href="./reference/llm-limits-to-data.html"><span>症状 → 数据缺口</span><b aria-hidden="true">↗</b></a></td>
-              </tr>
-              <tr>
-                <td data-label="课次"><a class="entry" href="./lessons/0002-agent-loop-anatomy.html"><span>第 2 课</span><b aria-hidden="true">↗</b></a></td>
-                <td data-label="对应"><span class="cell-date">Task 2</span><span class="cell-sub">D1</span></td>
-                <td data-label="主题"><span class="task-name">Agent 循环：模型每一圈看到了什么</span></td>
-                <td data-label="速查表"><a class="entry" href="./reference/agent-loop-cheatsheet.html"><span>Agent 循环</span><b aria-hidden="true">↗</b></a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </main>
+          </main>
 
 """ + FOOTER
 
