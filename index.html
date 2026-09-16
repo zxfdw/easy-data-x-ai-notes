@@ -208,6 +208,40 @@
           <p class="cell-sub" id="empty-state" hidden style="padding:32px 0">没有匹配的 Task。</p>
         </div>
       </section>
+
+      <section class="ledger" id="lessons" aria-labelledby="lessons-title">
+        <div class="ledger-head">
+          <h2 id="lessons-title">课程讲义</h2>
+          <span class="record-count">按课程 Task 次序编排</span>
+        </div>
+        <div class="ledger-table">
+          <table>
+            <caption class="sr-only">课程讲义与速查表</caption>
+            <thead>
+              <tr>
+                <th scope="col">课次</th>
+                <th scope="col">对应</th>
+                <th scope="col">主题</th>
+                <th scope="col">速查表</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="课次"><a class="entry" href="./lessons/0001-three-symptoms-one-root-cause.html"><span>第 1 课</span><b aria-hidden="true">↗</b></a></td>
+                <td data-label="对应"><span class="cell-date">Task 1</span><span class="cell-sub">F1 / F2</span></td>
+                <td data-label="主题"><span class="task-name">三个毛病，一个根因</span></td>
+                <td data-label="速查表"><a class="entry" href="./reference/llm-limits-to-data.html"><span>症状 → 数据缺口</span><b aria-hidden="true">↗</b></a></td>
+              </tr>
+              <tr>
+                <td data-label="课次"><a class="entry" href="./lessons/0002-agent-loop-anatomy.html"><span>第 2 课</span><b aria-hidden="true">↗</b></a></td>
+                <td data-label="对应"><span class="cell-date">Task 2</span><span class="cell-sub">D1</span></td>
+                <td data-label="主题"><span class="task-name">Agent 循环：模型每一圈看到了什么</span></td>
+                <td data-label="速查表"><a class="entry" href="./reference/agent-loop-cheatsheet.html"><span>Agent 循环</span><b aria-hidden="true">↗</b></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
     <footer class="site-foot">
