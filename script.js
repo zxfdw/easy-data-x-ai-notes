@@ -1,38 +1,19 @@
-const revealItems = document.querySelectorAll(".reveal");
+const input = document.querySelector("#log-search");
+const rows = Array.from(document.querySelectorAll("#log-body tr"));
+const count = document.querySelector("#visible-count");
+const empty = document.querySelector("#empty-state");
 
-if ("IntersectionObserver" in window) {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.08 }
-  );
-  revealItems.forEach((item) => observer.observe(item));
-} else {
-  revealItems.forEach((item) => item.classList.add("is-visible"));
-}
-
-const searchInput = document.querySelector("#log-search");
-const logRows = Array.from(document.querySelectorAll("#log-body tr"));
-const visibleCount = document.querySelector("#visible-count");
-const emptyState = document.querySelector("#empty-state");
-
-if (searchInput && logRows.length) {
-  searchInput.addEventListener("input", () => {
-    const query = searchInput.value.trim().toLocaleLowerCase("zh-CN");
-    let count = 0;
-    logRows.forEach((row) => {
-      const haystack = `${row.textContent} ${row.dataset.search || ""}`.toLocaleLowerCase("zh-CN");
-      const matches = !query || haystack.includes(query);
-      row.hidden = !matches;
-      if (matches) count += 1;
+if (input && rows.length) {
+  input.addEventListener("input", () => {
+    const q = input.value.trim().toLocaleLowerCase("zh-CN");
+    let n = 0;
+    rows.forEach((row) => {
+      const hay = `${row.textContent} ${row.dataset.search || ""}`.toLocaleLowerCase("zh-CN");
+      const hit = !q || hay.includes(q);
+      row.hidden = !hit;
+      if (hit) n += 1;
     });
-    if (visibleCount) visibleCount.textContent = String(count);
-    if (emptyState) emptyState.hidden = count !== 0;
+    if (count) count.textContent = String(n);
+    if (empty) empty.hidden = n !== 0;
   });
 }
