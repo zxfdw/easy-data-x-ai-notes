@@ -1,0 +1,153 @@
+/* ============================================================
+   Easy Data × AI 教学工作区 · 课程共享样式
+   这是本工作区的第一个组件：所有 lessons/ 与 reference/ 都链接它，
+   这样课程看起来像一门课，而不是一堆一次性页面。
+   世界：讲义纸（cold paper, 精确细线, 衬线正文, 侧注）
+   ============================================================ */
+
+:root {
+  --paper:      #f7f9fc;
+  --paper-2:    #eef3f9;
+  --panel:      #ffffff;
+  --ink:        #101b2d;
+  --ink-2:      #26374f;
+  --muted:      #55637a;   /* 5.5:1 on paper */
+  --faint:      #64708a;   /* 5.0:1 on paper */
+  --rule:       #c9d4e3;
+  --rule-soft:  #e0e7f0;
+  --accent:     #1f5fae;   /* 白字置其上 6.4:1 */
+  --accent-ink: #17498a;
+  --accent-wash:#e2ebf8;
+  --good:       #1c6b45;
+  --bad:        #a3321f;
+
+  --serif: ui-serif, Georgia, "Songti SC", "Noto Serif CJK SC", serif;
+  --sans:  system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mono:  ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { color: #fff; background: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.wrap { max-width: 46rem; margin: 0 auto; padding: 56px 24px 88px; }
+
+/* ---- 课头 ---- */
+.lesson-head { border-bottom: 2px solid var(--ink); padding-bottom: 22px; }
+.kicker {
+  font-family: var(--sans); font-size: 0.84rem; font-weight: 650;
+  color: var(--accent-ink); letter-spacing: 0.01em;
+}
+.lesson-head h1 {
+  margin: 12px 0 0; font-size: clamp(1.85rem, 3.4vw, 2.5rem);
+  font-weight: 600; line-height: 1.16; letter-spacing: -0.02em;
+}
+.lesson-head .objective {
+  margin: 14px 0 0; max-width: 60ch; color: var(--ink-2); font-size: 1.05rem;
+}
+.meta {
+  margin: 18px 0 0; padding: 0; list-style: none;
+  display: flex; flex-wrap: wrap; gap: 8px 22px;
+  font-family: var(--sans); font-size: 0.86rem; color: var(--muted);
+}
+.meta b { color: var(--ink); font-weight: 650; }
+
+/* ---- 章节 ---- */
+section { margin-top: 46px; }
+h2 {
+  margin: 0 0 14px; font-size: 1.42rem; font-weight: 600; letter-spacing: -0.015em;
+}
+h3 { margin: 30px 0 10px; font-size: 1.06rem; font-weight: 650; }
+p { margin: 0 0 16px; }
+p + p { margin-top: -2px; }
+ul, ol { margin: 0 0 16px; padding-left: 1.35em; }
+li + li { margin-top: 7px; }
+a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+strong { font-weight: 650; }
+
+code {
+  font-family: var(--mono); font-size: 0.86em; padding: 0.12em 0.36em;
+  border-radius: 4px; background: var(--paper-2); color: var(--ink-2);
+}
+pre {
+  margin: 20px 0; padding: 16px 18px; overflow-x: auto;
+  border: 1px solid var(--rule); border-radius: 10px; background: var(--panel);
+  font-family: var(--mono); font-size: 0.84rem; line-height: 1.6; color: var(--ink-2);
+}
+pre code { padding: 0; background: transparent; font-size: inherit; }
+
+.note {
+  margin: 22px 0; padding: 16px 20px; border: 1px solid var(--rule);
+  border-radius: 10px; background: var(--panel); color: var(--ink-2); font-size: 0.98rem;
+}
+.note > :last-child { margin-bottom: 0; }
+.note .label {
+  display: block; margin-bottom: 6px; font-family: var(--sans);
+  font-size: 0.84rem; font-weight: 650; color: var(--accent-ink);
+}
+
+table { width: 100%; border-collapse: collapse; margin: 22px 0; font-family: var(--sans); font-size: 0.92rem; }
+th, td { padding: 10px 12px; border: 1px solid var(--rule); text-align: left; vertical-align: top; }
+th { background: var(--paper-2); font-weight: 650; color: var(--ink); }
+td { color: var(--ink-2); }
+
+/* ---- 互动题 ---- */
+.quiz { margin: 24px 0; padding: 20px 22px; border: 1px solid var(--rule); border-radius: 12px; background: var(--panel); }
+.quiz h3 { margin: 0 0 14px; font-family: var(--sans); font-size: 1rem; font-weight: 650; }
+.quiz .q { margin-bottom: 18px; font-family: var(--sans); font-size: 0.96rem; }
+.quiz .q > p { margin: 0 0 10px; }
+.opts { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.opts button {
+  width: 100%; padding: 11px 14px; text-align: left; cursor: pointer;
+  border: 1px solid var(--rule); border-radius: 8px; background: var(--paper);
+  color: var(--ink-2); font-family: var(--sans); font-size: 0.92rem; line-height: 1.5;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+.opts button:hover { border-color: var(--accent); background: var(--accent-wash); }
+.opts button.picked-right { border-color: var(--good); background: #e6f2ec; color: var(--good); font-weight: 650; }
+.opts button.picked-wrong { border-color: var(--bad); background: #fbeae6; color: var(--bad); }
+.feedback { margin: 12px 0 0; font-family: var(--sans); font-size: 0.9rem; color: var(--muted); }
+.feedback.show { color: var(--ink-2); }
+
+/* ---- 页脚 ---- */
+.lesson-foot { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--ink); }
+.lesson-foot h2 { font-size: 1.1rem; }
+.lesson-foot ul { font-family: var(--sans); font-size: 0.92rem; }
+.ask {
+  margin-top: 26px; padding: 18px 20px; border: 1px solid var(--accent); border-radius: 12px;
+  background: var(--accent-wash); font-family: var(--sans); font-size: 0.94rem; color: var(--ink-2);
+}
+.ask > :last-child { margin-bottom: 0; }
+.ask .label { display: block; margin-bottom: 6px; font-family: var(--sans); font-size: 0.84rem; font-weight: 650; color: var(--accent-ink); }
+
+/* ---- 参考文档（速查表）---- */
+.ref-body h2 { margin-top: 40px; }
+.ref-body dt { font-weight: 650; margin-top: 18px; }
+.ref-body dd { margin: 4px 0 0; color: var(--ink-2); }
+.ref-badge {
+  display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px;
+  border: 1px solid var(--rule); font-family: var(--sans); font-size: 0.76rem;
+  color: var(--muted); vertical-align: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .wrap { max-width: none; padding: 0; }
+  .ask, .quiz { break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+  .lesson-head { border-bottom-color: #000; }
+}
