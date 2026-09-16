@@ -1,0 +1,46 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+/* 放宽内容容器，让宽表格一屏放下 */
+.main-content {
+  max-width: 100% !important;
+  padding: 2rem 2.5rem !important;
+  box-sizing: border-box;
+}
+.page-header { padding: 3rem 2rem; }
+
+/* 表格：正常显示（覆盖 Cayman 的 display:block + overflow:auto） */
+.main-content table {
+  display: table !important;
+  width: 100% !important;
+  overflow: visible !important;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  table-layout: auto;
+  word-break: normal;
+}
+.main-content table th,
+.main-content table td {
+  padding: 0.5rem 0.6rem !important;
+  border: 1px solid #e9ebec;
+  vertical-align: top;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+.main-content table th {
+  white-space: nowrap;
+  background: #f6f8fa;
+}
+.main-content table td:nth-child(1) { text-align: center; white-space: nowrap; }
+.main-content table td:nth-child(4) { white-space: nowrap; }
+.main-content table td:nth-child(5) { white-space: nowrap; }
+.main-content table code { font-size: 0.82em; padding: 0.1em 0.3em; }
+.main-content table small { color: #6a737d; font-size: 0.85em; }
+.main-content table br { line-height: 1.7; }
+
+@media (max-width: 900px) {
+  .main-content { padding: 1.25rem 1rem !important; }
+  .main-content table { display: block !important; width: 100% !important; overflow: auto !important; font-size: 0.8rem; }
+}
