@@ -10,7 +10,7 @@
 | Task | 主题 | 具体任务 | 天数 | 截止时间 | 状态 |
 |:--|:--|:--|:--|:--|:--|
 | **Task 1** | 环境准备与课前导读（F0·F1·F2） | 完成 Shell / Python / 模型 API / Git 环境自检并提交结果；课前导读 | 2 天 | 09-17 03:00 | ✅ [笔记](task1-环境准备与课前导读.md) |
-| **Task 2** | P1 场景识别 + D1 RAG 产品设计 + I1 AI 原生数据系统 | 获取测试用 API Key；安装 **pyseekdb** SDK；跑通 `code/D1` 的 **d1_1~d1_6**，体验从大模型调用到"推理→行动→观察"Agent 多轮循环 | 3 天 | 09-20 03:00 | ⏳ |
+| **Task 2** | P1 场景识别 + D1 RAG 产品设计 + I1 AI 原生数据系统 | 获取测试用 API Key；安装 **pyseekdb** SDK；跑通 `code/D1` 的 **d1_1~d1_6**，体验从大模型调用到"推理→行动→观察"Agent 多轮循环 | 3 天 | 09-20 03:00 | 🔄 [笔记](task2-场景识别与RAG产品设计.md) |
 | **Task 3** | P2 RAG 产品设计 + I2 RAG 与向量数据库 | 了解 RAG 基础流程与向量数据库**混合搜索**含义；跑通 `code/D2` 的 **d2_1~d2_2** | 3 天 | 09-23 03:00 | ⏳ |
 | **Task 4** | D2 统一 AI Native 数据层实战 + I3 SQL × AI | 跑通 `code/D2` 的 **d2_1~d2_5**，体验 Data 的向量化/存储/查询与混合搜索；通过 pyseekdb 执行 **AI Function** | 3 天 | 09-26 03:00 | ⏳ |
 | **Task 5** | P3 记忆系统设计 + I4 File SQL for AI Agent | 理解记忆系统存储关键 value 的原理，安装 **PowerContext**；完成 `select from read_csv(xxx.csv)` 流程 | 3 天 | 09-29 03:00 | ⏳ |
