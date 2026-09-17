@@ -210,8 +210,9 @@ Agentic RAG（代理式检索增强生成）与传统 RAG 的主要区别在于�
 <pre><code>cd ~/easy-data-x-ai &amp;&amp; source .venv/bin/activate
 python code/D1/d1_1_base.py          # 依次跑到 d1_6_agent.py</code></pre>
 <h2>02 学习心得（张博本人理解）</h2>
-<p>&lt;!-- 待张博补充：跑完这 6 个示例后最大的感受 --&gt;</p>
-<p>从 Task 1 的"一次提问、一次回答"，到 d1_6 的"推理 → 行动 → 观察"循环——这条演进路径正好印证了 Task 1 的那句话：<strong>Agent 能力 = 模型能力 × 数据质量 + 流程编排</strong>。模型是同一个模型（qwen3.7-flash），变化的是<strong>流程编排</strong>（是否绑工具、是否多轮循环）和<strong>数据</strong>（模拟知识库 → 真实 seekdb 向量库）。</p>
+<p>Agent 和普通调用的区别，不在会不会用工具，在<strong>它自己判断要不要再用一次</strong>。普通调用是一问一答就结束，Agent 会一直转到自己觉得够了为止。这个"够了没有"，是模型判断的，不是代码里写死的。</p>
+<p>还有一点是给模型用的资料得切。整份文档塞进去，它不好用；切成能直接回答问题的碎片，检索才有意义。所以数据整理到什么颗粒度，比选哪个模型影响更大。</p>
+<p>RAG 的价值也不是让模型变聪明，是让它说的话有出处。</p>
 <h2>📖 引用来源</h2>
 <ul><li>课程仓库：https://github.com/datawhalechina/easy-data-x-ai</li><li>开发者篇 D1：<code>docs/dev/D1 课程稿：大模型 API 工程化基础.md</code></li></ul>
           </div>
