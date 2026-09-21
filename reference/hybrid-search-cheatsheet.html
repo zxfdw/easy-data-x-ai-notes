@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>速查表 · 混合搜索与向量检索</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="lesson-head">
+    <p class="kicker">速查表 · Easy Data × AI</p>
+    <h1>混合搜索与向量检索</h1>
+    <p class="objective">一页纸：三路检索分工、RRF 公式、过滤执行顺序、踩坑清单。做 RAG 时随时回看。</p>
+  </header>
+
+  <section>
+    <h2>三路检索分工</h2>
+    <table>
+      <thead><tr><th>路数</th><th>解决</th><th>典型信号</th><th>失败表现</th></tr></thead>
+      <tbody>
+        <tr><td><strong>向量</strong></td><td>怎么表达都能找到</td><td>口语提问、同义改写</td><td>精确编号漂移</td></tr>
+        <tr><td><strong>全文</strong></td><td>专有名词必须找准</td><td>E-4012、型号、订单号</td><td>换个说法就搜不到</td></tr>
+        <tr><td><strong>标量过滤</strong></td><td>只在正确范围内找</td><td>权限、租户、状态、时间</td><td>越权数据泄出</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>RRF 融合</h2>
+    <div class="note">
+      <p style="text-align:center;font-size:1.2em"><strong>RRF(d) = Σ<sub>r∈R</sub> 1 / (k + r(d))</strong></p>
+    </div>
+    <ul>
+      <li><code>r(d)</code>：文档 d 在某一召回列表里的<strong>名次</strong></li>
+      <li><code>k</code>：平滑常数（常见取值 60）</li>
+      <li><strong>核心思想</strong>：分数不可比 → 改比名次</li>
+    </ul>
+    <p>若坚持用加权分数融合：必须先<strong>校准或归一化</strong>各路分数，权重靠验证集确定。</p>
+  </section>
+
+  <section>
+    <h2>过滤 vs 向量的执行顺序</h2>
+    <table>
+      <thead><tr><th>策略</th><th>过程</th><th>适用</th><th>风险</th></tr></thead>
+      <tbody>
+        <tr><td>过滤后精确计算</td><td>先过滤，再全量算分</td><td>过滤后数据很少</td><td>条件不严时延迟高</td></tr>
+        <tr><td>向量优先再过滤</td><td>先召回多候选，再过滤</td><td>过滤选择率高</td><td>过滤后可能不足 K 条</td></tr>
+        <tr><td>过滤下推 ANN</td><td>把允许集合下推进索引</td><td>多选择率 / 复杂权限</td><td>实现与优化器更复杂</td></tr>
+      </tbody>
+    </table>
+    <p><strong style="color:#b45309">⚠️ 红线</strong>：「先向量 Top-10，再过滤权限」既可能不足 10 条，更可能让<strong>无权限数据进入中间处理或日志</strong>。安全边界要在检索阶段生效。</p>
+  </section>
+
+  <section>
+    <h2>踩坑清单</h2>
+    <ul>
+      <li><strong>写入成功 ≠ 立刻可检索</strong>：ANN 索引异步构建，写完立即查询可能返回空</li>
+      <li><strong>分数不可直接相加</strong>：向量距离与 BM25 量纲不同</li>
+      <li><strong>告警要看懂再信</strong>：区分"数据问题"与"时序问题"</li>
+      <li><strong>别默认换模型</strong>：用三层归因（数据层 / 生成层 / 业务层）从下往上查</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>归因速判</h2>
+    <table>
+      <thead><tr><th>症状</th><th>层次</th><th>方向</th></tr></thead>
+      <tbody>
+        <tr><td>根本没检索到</td><td>数据 / 检索层</td><td>补数据、上混合搜索</td></tr>
+        <tr><td>检索到了但答歪</td><td>生成层</td><td>上下文组织、Prompt</td></tr>
+        <tr><td>需求本身就模糊</td><td>业务层</td><td>先定义清楚问题</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer class="lesson-foot">
+    <p><a href="../lessons/0003-hybrid-search-four-paths.html">← 第 3 课：混合搜索</a> · <a href="llm-limits-to-data.html">速查表：症状→数据缺口</a></p>
+  </footer>
+
+</div>
+</body>
+</html>
