@@ -26,8 +26,8 @@ TASKS = [
          deck="配好测试 API Key、装好 pyseekdb，并把 code/D1 的六个示例全部跑通，走完从一次调用到 Agent 循环的演进。",
          req="获取测试用 API Key；安装向量数据库 pyseekdb 的 SDK；跑通 code/D1 的 d1_1 至 d1_6 示例代码。"),
     dict(no="03", code="TASK 3", slug="task-3", name="RAG 产品设计与向量数据库",
-         plan=("3 天", "09-23 03:00"), record=None, status="待开始",
-         diff=None,
+         plan=("3 天", "09-23 03:00"), record="2026.09.21", status="进行中",
+         diff=3,
          read=["P2 让 Agent 会查资料", "I2 RAG 与向量数据库"],
          deck="理解 RAG 的基础流程，以及向量数据库中混合搜索的含义与实现。",
          req="了解 RAG 的基础流程与向量数据库混合搜索含义；跑通 code/D2 的 d2_1 至 d2_2。"),
@@ -383,7 +383,8 @@ FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 def main():
     open(os.path.join(ROOT, 'index.html'), 'w', encoding='utf-8').write(build_index())
     open(os.path.join(ROOT, 'favicon.svg'), 'w', encoding='utf-8').write(FAVICON)
-    srcs = {'task-1': 'task1-环境准备与课前导读.md', 'task-2': 'task2-场景识别与RAG产品设计.md'}
+    srcs = {'task-1': 'task1-环境准备与课前导读.md', 'task-2': 'task2-场景识别与RAG产品设计.md',
+            'task-3': 'task3-任务笔记.md'}
     for t in TASKS:
         d = os.path.join(ROOT, 'notes', t['slug'])
         os.makedirs(d, exist_ok=True)
