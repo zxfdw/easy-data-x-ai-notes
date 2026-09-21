@@ -29,6 +29,7 @@ TASKS = [
          plan=("3 天", "09-23 03:00"), record="2026.09.21", status="进行中",
          diff=3,
          read=["P2 让 Agent 会查资料", "I2 RAG 与向量数据库"],
+         lesson=("第 3 课", "lessons/0003-hybrid-search-four-paths.html", "混合搜索：一个问题，四条检索路"),
          deck="理解 RAG 的基础流程，以及向量数据库中混合搜索的含义与实现。",
          req="了解 RAG 的基础流程与向量数据库混合搜索含义；跑通 code/D2 的 d2_1 至 d2_2。"),
     dict(no="04", code="TASK 4", slug="task-4", name="AI Native 数据层与 AI Functions",
