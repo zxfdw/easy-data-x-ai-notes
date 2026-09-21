@@ -296,3 +296,7 @@ a.entry:hover { background: var(--accent-wash); }
   .site-foot { flex-direction: column; }
   .note-shell { padding-top: 36px; }
 }
+
+/* 难度口径说明 */
+.difficulty-legend { display:block; max-width:78ch; margin-top:14px; line-height:1.75; }
+.difficulty-legend strong { color: var(--text-strong, #1a1c20); }
