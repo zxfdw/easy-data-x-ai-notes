@@ -63,7 +63,7 @@
             <span class="chev" aria-hidden="true"></span>
           </summary>
           <div class="tree-kids">
-            <span class="tree-link is-locked"><span>任务笔记</span><span>未开始</span></span>
+            <a class="tree-link is-current" href="../task-3/"><span>任务笔记</span><span aria-hidden="true">↗</span></a>
             <span class="tree-read">P2 让 Agent 会查资料</span>
             <span class="tree-read">I2 RAG 与向量数据库</span>
           </div>
@@ -151,8 +151,8 @@
           <ul class="note-meta">
             <li><span class="k">计划</span><span class="v">3 天</span></li>
             <li><span class="k">截止</span><span class="v">09-23 03:00</span></li>
-            <li><span class="k">状态</span><span class="v">待开始</span></li>
-            <li><span class="k">更新</span><span class="v">—</span></li>
+            <li><span class="k">状态</span><span class="v">进行中</span></li>
+            <li><span class="k">更新</span><span class="v">2026.09.21</span></li>
           </ul>
         </header>
 
@@ -165,8 +165,85 @@
         <section class="note-section">
           <h2>实践成果与笔记</h2>
           <div class="prose">
-<h2>待开始</h2>
-<p>本 Task 尚未开始。完成后会在这里留下实践成果与学习笔记。</p>
+<blockquote>⏰ 截止时间：2026-09-23 03:00 📖 产品篇 P2《让 Agent 会查资料 —— RAG 产品设计》+ 产业应用篇 I2《向量数据库与 RAG》</blockquote>
+<h2>01 实践成果</h2>
+<h3>代码跑通</h3>
+<p>Task 3 要求跑通 <code>code/D2</code> 的 <strong>d2_1 ~ d2_2</strong>（注意：<code>d2_3 ~ d2_5</code> 属于 Task 4，本次不跑）。</p>
+<table><thead><tr><th>脚本</th><th>做什么</th><th>结果</th></tr></thead><tbody><tr><td><code>d2_1_ingest.py</code></td><td>建知识库：8 条原始文档 → 切分 → 写入 seekdb</td><td>✅ 原始 8 → 切分 8 → 存储 8</td></tr><tr><td><code>d2_2_vector_search.py</code></td><td>向量搜索：① 语义理解查询 ② 精确编号查询</td><td>✅ 两条查询均返回结果</td></tr></tbody></table>
+<p><strong>实测截图（真实终端原始输出）：</strong></p>
+<p><img src="../../screenshots/task3-d2-terminal.png" alt="Task3 d2_1/d2_2 运行截图" loading="lazy"></p>
+<blockquote>该图为脚本 stdout 的<strong>逐行原样渲染</strong>，未做概括或美化。</blockquote>
+<h3>真实输出摘录</h3>
+<p><strong>d2_1 写入完成</strong></p>
+<pre><code>$ python code/D2/d2_1_ingest.py
+&gt;&gt;&gt; 已删除旧的集合：d2_knowledge_base
+&gt;&gt;&gt; 原始文档数：8
+&gt;&gt;&gt; 切分后片段数：8
+&gt;&gt;&gt; seekdb 中实际存储条数：8
+✅ d2_1 写入完成，可继续运行 d2_2 / d2_3 / d2_4。</code></pre>
+<p><strong>d2_2 语义搜索（间隔数秒后重跑）+ 精确编号搜索</strong></p>
+<pre><code>$ python code/D2/d2_2_vector_search.py
+&gt;&gt;&gt; 已连接知识库：d2_knowledge_base，共 8 条文档
+
+==================================================
+  向量搜索：语义理解
+==================================================
+  [1] 相关度分数：0.4674
+       内容：连接池配置：最大连接数建议为 CPU 核心数的 2-4 倍，连接超时建议 30 秒。
+       分类：best_practices  版本：4.2
+  ...
+==================================================
+  向量搜索：精确编号
+==================================================
+  [1] 相关度分数：0.2061
+       内容：错误码 E-4012 表示数据库连接超时。解决方案：检查网络和端口，超时建议设为 30 秒。
+✅ 本次向量搜索第一名恰好是 E-4012；实际排名仍可能受模型影响。</code></pre>
+<hr>
+<h2>02 一个真实的坑：写入成功 ≠ 立刻可检索</h2>
+<h3>现象</h3>
+<p><code>d2_1</code> 写入完成后<strong>立即</strong>运行 <code>d2_2</code>，第一条<strong>语义查询</strong>返回「（无结果）」；<strong>隔约 5 秒再跑就正常返回 3 条</strong>。复现稳定，每次一致。</p>
+<pre><code># 紧接 ingest 之后
+  向量搜索：语义理解
+  （无结果）                      ← 索引尚未就绪
+⚠️  本次结果未命中访问控制/RBAC，不能断言语义检索成功。
+
+# 间隔数秒后重跑
+  向量搜索：语义理解
+  [1] 相关度分数：0.4674  ...      ← 正常返回 3 条</code></pre>
+<h3>我的判断</h3>
+<p><code>collection.add()</code> 返回「写入完成」，指的是<strong>数据已落库</strong>；但向量检索依赖的 <strong>ANN 索引是异步构建的</strong>。索引没建好时查询命中 0 条，<strong>不代表数据不在、也不代表检索质量差</strong>。</p>
+<p>值得注意的是：<strong>精确编号搜索（E-4012）在两次运行中都正常返回</strong>。这进一步说明问题不在数据本身，而在语义（ANN）索引的<strong>时序</strong>上。</p>
+<h3>对我的三点启发</h3>
+<ol><li><strong>写入 API 的返回值语义要看清</strong> —— 「add 成功」≠「可被检索」。生产链路里，写入后立刻查询是需要显式处理的时序问题。</li><li><strong>脚本里的告警要看懂再信</strong> —— <code>⚠️ 不能断言语义检索成功</code> 这次属于<strong>假警报</strong>，是索引时序导致的，不是检索效果不行。看到告警先问「是数据问题还是时序问题」。</li><li><strong>这跟 Task 2 的认知是一条线</strong> —— Task 2 我写下「模型负责想，数据库负责记住」；这次补上后半句：<strong>数据库"记住"本身也分阶段</strong>，落库和可检索不是同一时刻。</li></ol>
+<hr>
+<h2>03 理解：混合搜索为什么不是"高级玩法"</h2>
+<p>P2 和 I2 都反复强调同一件事：<strong>只要你做生产级 RAG，混合搜索就是基础能力，跟是不是 Agentic 无关。</strong></p>
+<h3>真实问题天然是"混合"的</h3>
+<p>课程举的例子，一个提问里同时叠了四类需求：</p>
+<blockquote>seekdb 1.2.0 在金融客户环境里的兼容性要求是什么？如果已经部署 1.0.0，升级前要注意什么？</blockquote>
+<table><thead><tr><th>需求类型</th><th>靠什么解决</th><th>单靠向量检索会怎样</th></tr></thead><tbody><tr><td><strong>语义理解</strong>（用户不会用文档原话）</td><td>向量检索</td><td>✅ 能解决</td></tr><tr><td><strong>精确匹配</strong>（<code>1.2.0</code> / <code>1.0.0</code> 这类版本号）</td><td>全文检索</td><td>❌ 容易漂</td></tr><tr><td><strong>范围过滤</strong>（行业、版本、发布时间）</td><td>标量过滤</td><td>❌ 做不到</td></tr><tr><td><strong>多跳整合</strong>（先找 A 再找 B 再合并）</td><td>Agent 编排</td><td>❌ 单轮检索不可能</td></tr></tbody></table>
+<p><strong>结论：只用单次向量检索，四类里只能解决一类。</strong></p>
+<h3>三类检索分工</h3>
+<table><thead><tr><th>检索方式</th><th>解决什么</th></tr></thead><tbody><tr><td><strong>向量检索</strong></td><td>"怎么表达都能找到" —— 语义近似</td></tr><tr><td><strong>全文检索</strong></td><td>"专有名词和精确信息必须找准" —— 错误码、型号、订单号</td></tr><tr><td><strong>标量过滤</strong></td><td>"只在正确范围内找" —— 权限、租户、状态、时间</td></tr></tbody></table>
+<h3>两路结果怎么合并：RRF</h3>
+<p>向量分数（距离）和关键词分数（BM25）<strong>量纲不同，不能直接相加</strong>。RRF（Reciprocal Rank Fusion）的做法是<strong>不比分数，比名次</strong>：</p>
+<p>$$\operatorname{RRF}(d)=\sum_{r\in R}\frac{1}{k+r(d)}$$</p>
+<p>其中 $r(d)$ 是文档 $d$ 在某路召回里的<strong>排名</strong>，$k$ 是平滑常数。这样就不需要假设两个分数可比。</p>
+<blockquote>⚠️ 如果非要用加权分数融合，得先<strong>校准或归一化</strong>各路分数，权重还要靠验证集定 —— 比 RRF 麻烦得多。</blockquote>
+<h3>一个安全细节（I2）</h3>
+<p>"先取向量 Top-10，再过滤权限"这个写法<strong>很危险</strong>：</p>
+<ul><li>过滤后可能<strong>不足 10 条</strong></li><li>更要命的是 —— <strong>无权限数据可能进入中间处理或日志</strong></li></ul>
+<p><strong>安全边界应尽可能在检索阶段生效</strong>，而不是检索完再裁剪。</p>
+<hr>
+<h2>04 归因：AI 答错了，先别怪模型</h2>
+<p>P2 给了「三层归因框架」，核心判断是：<strong>大多数问题在数据层，不在模型层。</strong></p>
+<p>对应到我自己要落地的医疗器械场景（研发知识库、注册资料、周报），这个框架尤其有用：</p>
+<ul><li>问"AI 答错了"，先分：是<strong>没检索到</strong>（数据/检索层）、还是<strong>检索到了但答歪</strong>（生成层）、还是<strong>需求本身就模糊</strong>（业务层）</li><li>排查顺序应该从下往上，而不是第一反应「换个更好的模型」</li></ul>
+<hr>
+<h2>05 待完成</h2>
+<ul><li>[x] <code>code/D2</code> d2_1 ~ d2_2 跑通</li><li>[ ] 学习心得（本页 02 / 03 已具备素材）</li><li>[ ] GitHub 打卡提交</li></ul>
+<hr>
+<p><em>记录：2026-09-21 ｜ 实验环境：WSL + Python 3.12.3 venv ｜ 模型：DashScope qwen3.7-flash</em></p>
           </div>
         </section>
 
