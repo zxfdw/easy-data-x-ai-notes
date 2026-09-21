@@ -13,14 +13,14 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 TASKS = [
     dict(no="01", code="TASK 1", slug="task-1", name="环境准备与课前导读",
          plan=("2 天", "09-17 03:00"), record="2026.09.15", status="已完成",
-         diff=3,
+         diff=2,
          read=["F0 课前闲聊", "F1 大模型的本质与边界", "F2 AI Agent 的完整图景"],
          lesson=("第 1 课", "lessons/0001-three-symptoms-one-root-cause.html", "三个毛病，一个根因"),
          deck="完成环境自检与离线评测，读完公共基础三篇，建立「从数据看 Agent」的认知框架。",
          req="完成 Shell、Python、模型 API、Git 环境自检并提交结果；完成课前导读与公共基础阅读。"),
     dict(no="02", code="TASK 2", slug="task-2", name="场景识别与 RAG 产品设计",
          plan=("3 天", "09-20 03:00"), record="2026.09.17", status="已完成",
-         diff=3,
+         diff=4,
          read=["P1 找准 Agent 的用武之地", "D1 让 Agent 会查资料", "I1 AI 原生数据系统"],
          lesson=("第 2 课", "lessons/0002-agent-loop-anatomy.html", "Agent 循环：模型每一圈看到了什么"),
          deck="配好测试 API Key、装好 pyseekdb，并把 code/D1 的六个示例全部跑通，走完从一次调用到 Agent 循环的演进。",
@@ -283,6 +283,7 @@ def build_index():
 {chr(10).join(rows)}
             </tbody>
           </table>
+          <p class="cell-sub difficulty-legend">难度以<strong>学习者实感</strong>校准（非课程官方评分）：按 ①概念密度 ②前置知识 ③动手门槛 ④与已有经验的距离，取四项中最高者，1 至 5 分。分值越高表示该 Task 里存在越难啃的部分。</p>
           <p class="cell-sub" id="empty-state" hidden style="padding:32px 0">没有匹配的 Task。</p>
         </div>
       </section>
