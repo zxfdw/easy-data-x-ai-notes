@@ -151,3 +151,32 @@ td { color: var(--ink-2); }
   a { color: inherit; text-decoration: none; }
   .lesson-head { border-bottom-color: #000; }
 }
+
+/* ---- 课程导航（返回学习主页）---- */
+.lesson-nav {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  margin: 0 0 34px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--sans); font-size: 0.88rem;
+}
+.lesson-nav a, .lesson-nav span.disabled {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 13px; border-radius: 999px; text-decoration: none;
+  border: 1px solid var(--rule); color: var(--muted);
+  background: var(--panel); line-height: 1.2;
+}
+.lesson-nav a:hover, .lesson-nav a:focus-visible {
+  border-color: var(--accent); color: var(--accent-ink); background: var(--accent-wash);
+}
+.lesson-nav .home {
+  border-color: var(--accent); color: #fff; background: var(--accent); font-weight: 600;
+}
+.lesson-nav .home:hover, .lesson-nav .home:focus-visible {
+  color: #fff; background: var(--accent-ink); border-color: var(--accent-ink);
+}
+.lesson-nav span.disabled { opacity: 0.5; }
+.lesson-nav .spacer { flex: 1 1 auto; }
+@media (max-width: 560px) {
+  .lesson-nav { gap: 8px; }
+  .lesson-nav a, .lesson-nav span.disabled { padding: 6px 11px; font-size: 0.84rem; }
+}
