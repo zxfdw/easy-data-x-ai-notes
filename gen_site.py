@@ -26,7 +26,7 @@ TASKS = [
          deck="配好测试 API Key、装好 pyseekdb，并把 code/D1 的六个示例全部跑通，走完从一次调用到 Agent 循环的演进。",
          req="获取测试用 API Key；安装向量数据库 pyseekdb 的 SDK；跑通 code/D1 的 d1_1 至 d1_6 示例代码。"),
     dict(no="03", code="TASK 3", slug="task-3", name="RAG 产品设计与向量数据库",
-         plan=("3 天", "09-23 03:00"), record="2026.09.21", status="进行中",
+         plan=("3 天", "09-23 03:00"), record="2026.09.22", status="已完成",
          diff=3,
          read=["P2 让 Agent 会查资料", "I2 RAG 与向量数据库"],
          lesson=("第 3 课", "lessons/0003-hybrid-search-four-paths.html", "混合搜索：一个问题，四条检索路"),
