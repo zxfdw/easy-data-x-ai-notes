@@ -151,8 +151,8 @@
           <ul class="note-meta">
             <li><span class="k">计划</span><span class="v">3 天</span></li>
             <li><span class="k">截止</span><span class="v">09-23 03:00</span></li>
-            <li><span class="k">状态</span><span class="v">进行中</span></li>
-            <li><span class="k">更新</span><span class="v">2026.09.21</span></li>
+            <li><span class="k">状态</span><span class="v">已完成</span></li>
+            <li><span class="k">更新</span><span class="v">2026.09.22</span></li>
           </ul>
         </header>
 
@@ -241,10 +241,9 @@
 <ul><li>问"AI 答错了"，先分：是<strong>没检索到</strong>（数据/检索层）、还是<strong>检索到了但答歪</strong>（生成层）、还是<strong>需求本身就模糊</strong>（业务层）</li><li>排查顺序应该从下往上，而不是第一反应「换个更好的模型」</li></ul>
 <hr>
 <h2>05 学习心得</h2>
-<blockquote>原话（张博）：RAG 不单单是指向量化加语义检索；做一个 RAG 其实需要很多步骤；其中最重要的还是我们对自己业务场景中的数据的准备和认知。</blockquote>
 <h3>一、RAG 不等于「向量 + 语义检索」</h3>
-<p>这是我这次最大的认知修正。</p>
-<p>以前听到 RAG，脑子里就是「把文档切了、转成向量、存库、搜最像的几条、丢给模型」。P2 一开头就把这个拆了：<strong>RAG 的重点在第一个词 —— Retrieval（检索），不在 Vector。</strong></p>
+<p>以前听到 RAG，脑子里就是「把文档切了、转成向量、存库、搜最像的几条、丢给模型」。这次看下来，最大的认知修正是：<strong>RAG 不单单是向量化加语义检索，做一个 RAG 其实需要很多步骤，其中最重要的还是我们对自己业务场景中数据的准备和认知。</strong></p>
+<p>P2 一开头就把前者拆了：<strong>RAG 的重点在第一个词 —— Retrieval（检索），不在 Vector。</strong></p>
 <p>检索是一整个工具箱：全文检索（错误码、版本号、产品型号）、向量检索（口语化提问、同义表达）、标量过滤（权限、租户、时间、产品线）、图谱跳转、API 调用……<strong>向量只是其中一路。</strong></p>
 <p>课程里那个例子对我触动最大：用户搜「seekdb 1.2.0 的兼容性」，只有纯向量检索的系统，把 1.0.0 的文档捞了出来 —— 在向量空间里这俩「很像」，但用户要的是 1.2.0。<strong>向量懂「意思像」，但不懂「精确」。</strong></p>
 <p>所以只用一路检索，出问题几乎是必然的。这也是混合搜索为什么不是「高级玩法」的原因。</p>
@@ -262,8 +261,8 @@
 <p>对我自己更有意义的一点：我手上的医疗器械研发场景（仿真数据、测试报告、注册资料），恰恰是「数据准备」最难、也最值钱的地方 —— 文档有版本号、有注册证编号、有生效日期、有权限范围，这些<strong>必须精确匹配</strong>，光靠语义像不行。</p>
 <p><strong>一句话收尾：</strong> 一个 RAG 的上限，不取决于你用了多强的模型，而取决于你能不能把正确的信息找回来 —— 而能不能找回来，首先取决于你对自己的数据有多清楚。</p>
 <hr>
-<h2>06 待完成</h2>
-<ul><li>[x] <code>code/D2</code> d2_1 ~ d2_2 跑通</li><li>[x] 学习心得（见上节 05）</li><li>[ ] GitHub 打卡提交（张博本人填写）</li></ul>
+<h2>06 完成情况</h2>
+<ul><li>[x] <code>code/D2</code> d2_1 ~ d2_2 跑通</li><li>[x] 学习心得（见上节 05）</li><li>[x] GitHub 打卡提交（2026-09-22）</li></ul>
 <hr>
 <p><em>记录：2026-09-21 ｜ 实验环境：WSL + Python 3.12.3 venv ｜ 模型：DashScope qwen3.7-flash</em></p>
           </div>
