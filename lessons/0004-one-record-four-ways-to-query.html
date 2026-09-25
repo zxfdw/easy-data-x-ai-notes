@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 4 课 · 同一份数据，四种查法</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="lesson-nav" aria-label="课程导航"><a class="home" href="../index.html">&larr; 学习主页</a><span class="spacer"></span><a href="0003-hybrid-search-four-paths.html">&larr; 第 3 课</a><a href="../reference/hybrid-search-cheatsheet.html">速查表 &rarr;</a></nav>
+
+  <header class="lesson-head">
+    <p class="kicker">Easy Data × AI · 第 4 课（对应 Task 4 · D2 + I3）</p>
+    <h1>同一份数据，四种查法</h1>
+    <p class="objective">学完这一课，你能回答一个问题：为什么"把数据存进向量库"只是第一步，<strong>一条记录要能被四种方式同时查到</strong>才算真的可用。</p>
+    <ul class="meta">
+      <li>预计耗时 <b>12 分钟</b></li>
+      <li>关联 <b>d2_3 / d2_4 / d2_5</b></li>
+      <li>类型 <b>概念 + 归因 + 动手</b></li>
+    </ul>
+  </header>
+
+  <section>
+    <h2>先回答上一课留下的悬念</h2>
+    <p>第 3 课你说过一句话：混合搜索是把向量和全文<strong>合起来用</strong>。但那还是"两个检索引擎"的视角。</p>
+    <p>D2 把镜头往后拉了一格，问的是更前面的问题：<strong>这份数据本身，长什么样，才能被这几种方式查到？</strong></p>
+    <p>I1 里那句"模型负责想，数据库负责记住"，到 D2 才真正落地——不是随便找个数据库塞进去，而是<strong>同一条记录，要同时具备四种可查性</strong>。</p>
+  </section>
+
+  <section>
+    <h2>四种查法，缺一个都会出事</h2>
+    <table>
+      <thead>
+        <tr><th>查法</th><th>靠什么实现</th><th>缺了它会怎样</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>精确编号</strong><br><small>E-4012、型号、版本号</small></td><td>全文 / 标量索引</td><td>用户报错码来查，检索"漂"到同主题的其他文档</td></tr>
+        <tr><td><strong>语义</strong><br><small>"怎么设计权限"</small></td><td>向量索引</td><td>用户不照抄原文就查不到，只能靠猜关键词</td></tr>
+        <tr><td><strong>关键词</strong><br><small>专有名词原样命中</small></td><td>全文索引（BM25）</td><td>术语、编号这类"必须找准"的查询失去保障</td></tr>
+        <tr><td><strong>属性过滤</strong><br><small>版本 / 分类 / 权限</small></td><td>标量字段</td><td>结果范围失控，越权数据可能流经系统</td></tr>
+      </tbody>
+    </table>
+    <p>关键认知：<strong>这四个不是"四选一的检索策略"，而是同一条数据的四种"面孔"。</strong>存的时候就要把这四种信息都带上，而不是查的时候现想办法。</p>
+  </section>
+
+  <section>
+    <h2>你在 d2_4 亲手看到过"跑偏"</h2>
+    <p>d2_4 拿同一组查询，分别走纯向量和混合搜索。回看你的真实输出：</p>
+<pre><code>查询：「怎么设计用户权限」
+
+  纯向量搜索                          混合搜索（向量 + 全文）
+  [1] 连接池配置：最大连接数建议 ...    [1] 访问控制架构设计：基于 RBAC ...
+
+查询：「数据库性能优化」
+
+  纯向量搜索                          混合搜索（向量 + 全文）
+  [1] 连接池配置：最大连接数建议 ...    [1] 数据库查询性能优化指南 ...</code></pre>
+    <p>两问都<strong>跑偏到"连接池配置"</strong>。原因不神秘：查询里带"数据库"这个大词，向量空间里"数据库"是个强语义簇，于是<strong>同主题但不对题</strong>的文档被一起捞了上来。</p>
+    <p>而全文那一路是"字面重合"，"权限"没出现在连接池文档里，自然不会被顶到第一。</p>
+    <div class="note">
+      <p><strong>所以要修正一个直觉：混合搜索补的不是"精度"，是"另一条判断路径"。</strong></p>
+      <p>向量靠语义相近，全文靠字面重合——两套分数体系不同（这正是 RRF 比名次而不是比分数），互为兜底。单靠一路，撞到它的盲区就整条跑偏。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>三个数字，看懂"切"和"查"是两件事</h2>
+    <p>d2_5 用三种分块策略跑同一批数据，结果是这样的：</p>
+    <table>
+      <thead>
+        <tr><th>策略</th><th>块数</th><th>均长</th><th>Recall@3</th><th>它胜在哪</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>固定 overlap</td><td>5</td><td>186 字</td><td>60%</td><td>实现简单，但在章节边界处切断语义</td></tr>
+        <tr><td><strong>动态 overlap</strong></td><td>6</td><td>185 字</td><td><strong>100%</strong></td><td>在标题 / 段落边界加大重叠，低成本改善边界召回</td></tr>
+        <tr><td>父子 chunk</td><td>9</td><td>104 字</td><td>60%</td><td>子块精准检索 + 父块完整上下文，适合多跳</td></tr>
+      </tbody>
+    </table>
+    <p>别急着记"动态 overlap 最好"。这一课真正要带走的是一句话：</p>
+    <div class="note">
+      <p style="text-align:center;font-size:1.1em"><strong>分块策略 与 检索后端 是两个独立变量。</strong></p>
+      <p>"怎么切"决定上下文完整性；"用什么查"决定召回方式。混着调，你永远不知道是哪个在起作用。这也是 d2_5 脚本开头那句提示的意思。</p>
+    </div>
+    <p>顺带一个诚实的边界：这次语义分块<strong>没跑成</strong>——它需要单独的 embedding 服务，我方 Key 无对应模型权限，脚本自动跳过了这一路。所以上面三行<strong>不含语义分块</strong>，不能当作"语义分块不如动态 overlap"的证据。</p>
+  </section>
+
+  <section>
+    <h2>一个复现的坑：写入成功 ≠ 立刻可检索</h2>
+    <p>d2_1 写完立刻跑 d2_2，第一条语义查询返回"（无结果）"；隔几秒重跑就正常。</p>
+    <p>但同一时刻 d2_3 混合搜索<strong>却正常出结果</strong>。这说明什么呢？</p>
+    <p class="ask"><span class="label">先自己猜</span>如果你是设计者，为什么全文那一路能先用上？</p>
+    <p>一个合理推测：<strong>向量索引是异步构建的</strong>（尤其 ANN 结构），而全文索引构建快得多。所以"混合"里先有返回，另一条路追上以后结果才完整。<strong>注意这是推测，不是课程结论</strong>——但工程上它提醒你一件事：<strong>别把"写入成功"当成"可检索"</strong>，异步系统里这两件事之间有时间差。</p>
+  </section>
+
+  <section>
+    <h2>自测：三个问题</h2>
+    <p>试着不看上面作答（<strong>提取练习</strong>比重读一遍有效得多）。</p>
+
+    <div class="quiz q" data-answer="2">
+      <p><strong>1. "同一条数据要有四种查法"，最准确的理解是？</strong></p>
+      <div class="opts">
+        <button>检索时按问题类型在四种策略里挑一种用</button>
+        <button>四种是演进顺序，新应用直接用最后一种就行</button>
+        <button>存的时候就要把四种可查信息一起带上才对</button>
+      </div>
+      <p class="feedback" hidden></p>
+    </div>
+
+    <div class="quiz q" data-answer="0">
+      <p><strong>2. d2_4 里纯向量搜索为什么会跑偏到"连接池配置"？</strong></p>
+      <div class="opts">
+        <button>查询里的大词形成强语义簇，捞来同主题文档</button>
+        <button>向量模型版本太旧，需要换一个更强的模型才行</button>
+        <button>文档切得太大，一条里混进了太多不同主题内容</button>
+      </div>
+      <p class="feedback" hidden></p>
+    </div>
+
+    <div class="quiz q" data-answer="1">
+      <p><strong>3. d2_5 的三个 Recall@3 数字，该怎么用？</strong></p>
+      <div class="opts">
+        <button>直接得出动态 overlap 是三种里最好的分块策略</button>
+        <button>只能说明该策略在这批数据上的效果，不能推广</button>
+        <button>说明父子 chunk 已经过时，不该再用在多跳场景里</button>
+      </div>
+      <p class="feedback" hidden></p>
+    </div>
+
+    <p class="ask"><span class="label">提示</span>三题答完再看反馈；答错比答对更有价值——说明那里正是你要补的。</p>
+  </section>
+
+  <section>
+    <h2>接到你的实际场景</h2>
+    <p>把这一课接到你手上的事——研发知识库、注册资料、周报汇总：</p>
+    <ol>
+      <li><strong>一条注册资料，要能按什么查？</strong>编号（标准号）、语义（"这类材料的生物相容性要求"）、关键词（材料牌号）、属性（版本 / 状态 / 密级）。四种都要有，缺一个就会在某类查询上整条失效。</li>
+      <li><strong>当 AI 在知识库里答得不对</strong>，先别换模型。按 Task 3 那个三层归因走一遍：是没检索到（数据层）？检索到但答歪（生成层）？还是需求本身模糊（业务层）？</li>
+      <li><strong>"先过滤、再召回、最后调模型"</strong>——I3 的顺序。版本、密级这类过滤要在检索阶段生效，模型只处理过完筛的内容，省的是又慢又贵的调用。</li>
+    </ol>
+    <p>这仍然扣着你在 Task 1 提出的公式：<strong>Agent 能力 = 模型能力 × 数据质量 + 流程编排</strong>。第 3 课讲的是"流程编排"里怎么合；这一课讲的是"数据质量"里怎么存。</p>
+  </section>
+
+  <section>
+    <h2>推荐一手材料</h2>
+    <ul>
+      <li>课程原文：<a href="https://github.com/datawhalechina/easy-data-x-ai" target="_blank" rel="noreferrer">D2 统一 AI Native 数据层实战</a>——四种可查性的完整论述。</li>
+      <li>I3《SQL × AI —— AI Functions 的设计与执行》：在数据库系统内部调用 AI 的方式。</li>
+      <li>你自己的 d2_4 / d2_5 真实输出：<a href="../notes/task-4/">Task 4 任务笔记</a>。</li>
+    </ul>
+  </section>
+
+  <footer class="lesson-foot">
+    <div class="ask">
+      <span class="label">我是你的老师，随时提问</span>
+      <p>任何一处没讲透——比如"AI Function 和普通 UDF 的区别在哪"、"异步索引在工程上怎么保证不读到脏数据"、"我司注册资料场景该配哪几路"——直接问我，我按你的理解程度再讲一遍。</p>
+    </div>
+    <p><a href="0003-hybrid-search-four-paths.html">← 第 3 课</a> · <a href="../notes/task-4/">Task 4 任务笔记</a> · <a href="../reference/hybrid-search-cheatsheet.html">速查表</a></p>
+  </footer>
+
+</div>
+
+<script>
+document.querySelectorAll('.q').forEach(function (q) {
+  var right = parseInt(q.dataset.answer, 10);
+  var buttons = Array.from(q.querySelectorAll('.opts button'));
+  var fb = q.querySelector('.feedback');
+  var fbs = {
+    2: {
+      2: '对了。四种不是检索时四选一，而是存的时候就要一起带上——数据层的问题要在数据层解决。',
+      0: '再想一层：如果检索时才现选策略，那些"没带上的可查信息"是补不回来的。',
+      1: '四种之间没有演进关系，它们是同一条数据的四种面孔，缺一个就会在某类查询上失效。'
+    },
+    0: {
+      0: '对了。"数据库"是个强语义簇，向量检索会把同主题但不对题的文档一起捞上来，全文那一路正好兜住。',
+      1: '换模型解决不了这个问题——它来自语义空间本身的性质，不在模型的强弱。',
+      2: '切块大小是另一个变量（d2_5 讲的），和这里的"跑偏"不是同一件事。'
+    },
+    1: {
+      1: '对了。这是这批数据、这个数据集上的结果；而且它胜在边界处理，不是"更聪明的检索"。',
+      0: '如果这么读，就等于把一个实验结论当成了通用规律——而且这次语义分块没跑成，样本本身不完整。',
+      2: '父子 chunk 的价值在多跳推理，本次实验测的是单轮召回，测不到它的长处。'
+    }
+  };
+  buttons.forEach(function (btn, i) {
+    btn.addEventListener('click', function () {
+      buttons.forEach(function (b) { b.classList.remove('picked-right', 'picked-wrong'); b.disabled = false; });
+      var text = fbs[right] && fbs[right][i];
+      fb.textContent = text || '再回看对应章节。';
+      fb.hidden = false;
+      fb.classList.add('show');
+    });
+  });
+});
+</script>
+
+</body>
+</html>
