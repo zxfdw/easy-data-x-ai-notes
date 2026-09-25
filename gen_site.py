@@ -36,6 +36,7 @@ TASKS = [
          plan=("3 天", "09-26 03:00"), record="2026.09.25", status="已完成",
          diff=4,
          read=["D2 统一 AI Native 数据层实战", "I3 SQL × AI 与 AI Functions"],
+         lesson=("第 4 课", "lessons/0004-one-record-four-ways-to-query.html", "同一份数据，四种查法"),
          deck="体验数据在 AI 应用里如何被承载，并尝试在数据库系统内部调用 AI。",
          req="跑通 code/D2 的 d2_1 至 d2_5；通过 pyseekdb 执行 AI Function。"),
     dict(no="05", code="TASK 5", slug="task-5", name="记忆系统与 File SQL",
