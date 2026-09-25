@@ -33,8 +33,8 @@ TASKS = [
          deck="理解 RAG 的基础流程，以及向量数据库中混合搜索的含义与实现。",
          req="了解 RAG 的基础流程与向量数据库混合搜索含义；跑通 code/D2 的 d2_1 至 d2_2。"),
     dict(no="04", code="TASK 4", slug="task-4", name="AI Native 数据层与 AI Functions",
-         plan=("3 天", "09-26 03:00"), record=None, status="待开始",
-         diff=None,
+         plan=("3 天", "09-26 03:00"), record="2026.09.25", status="已完成",
+         diff=4,
          read=["D2 统一 AI Native 数据层实战", "I3 SQL × AI 与 AI Functions"],
          deck="体验数据在 AI 应用里如何被承载，并尝试在数据库系统内部调用 AI。",
          req="跑通 code/D2 的 d2_1 至 d2_5；通过 pyseekdb 执行 AI Function。"),
@@ -386,7 +386,7 @@ def main():
     open(os.path.join(ROOT, 'index.html'), 'w', encoding='utf-8').write(build_index())
     open(os.path.join(ROOT, 'favicon.svg'), 'w', encoding='utf-8').write(FAVICON)
     srcs = {'task-1': 'task1-环境准备与课前导读.md', 'task-2': 'task2-场景识别与RAG产品设计.md',
-            'task-3': 'task3-任务笔记.md'}
+            'task-3': 'task3-任务笔记.md', 'task-4': 'task4-任务笔记.md'}
     for t in TASKS:
         d = os.path.join(ROOT, 'notes', t['slug'])
         os.makedirs(d, exist_ok=True)
