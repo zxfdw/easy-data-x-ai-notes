@@ -165,8 +165,57 @@
         <section class="note-section">
           <h2>实践成果与笔记</h2>
           <div class="prose">
-<h2>待开始</h2>
-<p>本 Task 尚未开始。完成后会在这里留下实践成果与学习笔记。</p>
+<blockquote>⏰ 截止时间：2026-10-02 03:00 📖 开发者篇 D3《实践出真知：Agentic RAG 实战》+ 产业应用篇 I5《AI 列与派生数据维护》</blockquote>
+<h2>01 实践成果</h2>
+<h3>代码跑通</h3>
+<p>Task 6 要求跑通 <code>code/D3</code> 的 <strong>d3_1 ~ d3_6</strong>。</p>
+<table><thead><tr><th>脚本</th><th>做什么</th><th>结果</th></tr></thead><tbody><tr><td><code>d3_1_ingest.py</code></td><td>建知识库：19 个片段写入 seekdb</td><td>✅ 5 类分布：release_notes 5 / error_codes 4 / financial 3 / best_practices 4 / api_reference 3</td></tr><tr><td><code>d3_2_agentic_rag.py</code></td><td>Agentic RAG：Agent 自主判断要不要检索、检索几轮</td><td>✅ 4 个问题全部作答，闲聊问题正确拒答</td></tr><tr><td><code>d3_3_compare.py</code></td><td>检索方式对照：纯向量 vs 增强检索（5 场景）</td><td>✅ 纯向量 1/5，增强检索 3/5</td></tr><tr><td><code>d3_4_production.py</code></td><td>生产要点：工具描述 / top_k / 增量更新</td><td>✅ 三个要点全部演示</td></tr><tr><td><code>d3_5_evaluate.py</code></td><td>离线评测：60 条问答</td><td>✅ Hit@3 = 1.0，拒答准确率 = 1.0</td></tr><tr><td><code>d3_6_benchmark.py</code></td><td>检索三角实验：50 条可回答案例</td><td>✅ Hit@1：纯向量 0.72 / 混合 0.88</td></tr></tbody></table>
+<h3>真实输出摘录</h3>
+<p><strong>d3_2 Agentic RAG（Agent 自主决定是否检索）</strong></p>
+<pre><code>【问题 4】你好，今天天气怎么样？
+  预期行为：不需要检索（闲聊）
+  回答：你好！我是您的产品技术文档助手，专注于解答产品相关的
+        功能、错误码、版本等技术问题。很抱歉我无法为您提供天气
+        查询服务。请问有关于产品的其他疑问吗？
+
+✅ Agentic RAG 演示完成</code></pre>
+<p><strong>d3_3 检索方式对照（5 个场景）</strong></p>
+<pre><code>【场景一：精确错误码查询】&quot;E-4012 错误怎么解决&quot;
+  纯向量 Top-1 ❌：错误码 E-4013（认证握手超时）
+  混合检索 Top-1 ✅：错误码 E-4012（数据库连接池耗尽）
+
+【场景二：精确季度数据查询】&quot;2024年Q3的营收情况&quot;
+  纯向量 Top-1 ❌：2024年Q1营收数据
+  混合检索 Top-1 ❌：2024年Q1营收数据
+
+【场景三：精确版本号查询】&quot;OB-4.2.1 版本和旧版本兼容吗&quot;
+  纯向量 Top-1 ✅：版本支持策略（OB-4.2.1）
+
+【场景四：精确函数名查询】&quot;DBMS_HYBRID_SEARCH 函数的用法&quot;
+  纯向量 Top-1 ❌：检索能力 FAQ
+  混合检索 Top-1 ✅：DBMS_HYBRID_SEARCH 函数说明
+
+【场景五：纯语义查询】&quot;怎么优化数据库的查询性能&quot;
+  纯向量 Top-1 ❌：索引设计最佳实践
+  混合检索 Top-1 ❌：OB-4.2.1 版本兼容性说明
+
+汇总：纯向量检索命中率 1/5，增强检索命中率 3/5</code></pre>
+<p><strong>d3_6 检索三角实验（50 条可回答案例）</strong></p>
+<pre><code>&gt;&gt;&gt; 已完成 50 条可回答案例的检索三角实验
+&gt;&gt;&gt; Hit@1：纯向量 0.72 / 混合检索 0.88
+&gt;&gt;&gt; P95：纯向量 0.4569 ms / 混合检索 0.5212 ms</code></pre>
+<hr>
+<h2>02 这次的体会</h2>
+<p><strong>1. Agentic RAG 和普通 RAG 的分界，是"要不要查"由谁决定。</strong></p>
+<p>d3_2 里最能说明问题的是第 4 个问题——"今天天气怎么样"。脚本给这个问题的预期行为写的是"不需要检索（闲聊）"，Agent 确实没有去查知识库，而是直接说明自己只答产品技术问题。对比 d3_3 里那些"检索了但答歪"的场景，会发现这是两种完全不同的失败：一个是<strong>不该查却查了</strong>，一个是<strong>查了但没查对</strong>。Agentic 这一层管的是前者，混合搜索管的是后者。</p>
+<p><strong>2. "命中率 1/5 → 3/5"这个数字，比单独看某一组更有说服力。</strong></p>
+<p>d3_3 把五个场景摆在一起，能看出增强检索不是万能药：场景二（Q3 营收）两种方式都答错了，场景五（纯语义）增强检索反而跑偏。这跟 Task 4 里 d2_4 的结论是一致的——<strong>混合搜索补的是"另一条判断路径"，不是"精度升级"</strong>。它救的是那些"字面精确"的查询（错误码、函数名、版本号），救不了纯语义查询的跑偏，也救不了分词器不支持的场景（脚本里专门标注了"版本号含点号，全文搜索分词器不支持"）。把"增强"当"更好"用，就会在场景五这种地方翻车。</p>
+<p><strong>3. 生产环境的三个变量，都不是模型问题。</strong></p>
+<p>d3_4 演示的三件事——工具描述质量、top_k 取值、增量更新——全都是"工程配置"层面的事，跟模型能力无关。工具描述模糊 vs 清晰，Agent 调用的查询词就不一样（模糊描述让它自己扩写成"OceanBase 4.2.1 版本兼容性问题"，清晰描述则直接写"OB-4.2.1 版本兼容性"）；top_k 从 1 到 8 是拿召回换精度；增量更新则是知识库能不能持续长的问题。这跟前面几课反复出现的那句话对上了：<strong>Agent 能力 = 模型能力 × 数据质量 + 流程编排</strong>——这次三件事全落在"流程编排"里。</p>
+<p><strong>4. 一个环境上的插曲，顺手记一下。</strong></p>
+<p><code>d3_2</code> 和 <code>d3_4</code> 第一次跑都报了 404——脚本里写死的模型是 <code>deepseek-ai/DeepSeek-V3</code>，当前 Key 没有这个模型的权限。改成课程一直在用的 <code>qwen3.7-flash</code> 后就正常了。这不算课程内容，但很真实：<strong>跑开源项目时，"跑不通"和"代码写错了"经常不是一回事，先看报错是不是环境（权限、模型名）问题，再去改代码。</strong> 另外 d3_5 的 RAGAS 评测那条路也依赖同一个模型，本次未跑，属于已知缺失。</p>
+<hr>
+<p><em>创建：2026-09-28</em></p>
           </div>
         </section>
 
