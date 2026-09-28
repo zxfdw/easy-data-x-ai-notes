@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>速查表 · Agentic RAG 与 AI 列</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="lesson-nav" aria-label="课程导航"><a class="home" href="../index.html">&larr; 学习主页</a><span class="spacer"></span><a href="../lessons/0005-who-decides-to-search.html">&larr; 第 5 课</a><span class="disabled">下一课 &rarr;</span></nav>
+
+  <header class="lesson-head">
+    <p class="kicker">速查表 · Easy Data × AI</p>
+    <h1>Agentic RAG 与 AI 列</h1>
+    <p class="objective">一页纸：两种失败的分工、"增强"的正确用法、生产三变量、环境坑清单。做 RAG 时随手回看。</p>
+  </header>
+
+  <section>
+    <h2>RAG 的两种失败</h2>
+    <table>
+      <thead><tr><th>失败</th><th>典型信号</th><th>该由谁负责</th></tr></thead>
+      <tbody>
+        <tr><td><strong>不该查却查了</strong></td><td>闲聊问题也去翻知识库</td><td>Agent 的判断（Agentic 层）</td></tr>
+        <tr><td><strong>查了但没查对</strong></td><td>精确编号漂到同主题文档</td><td>检索配置（索引 / 混合搜索）</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <p>Agentic RAG 与普通 RAG 的分界：<strong>不是"会不会用工具"，是"自己判断要不要用一次"。</strong></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>"增强检索"不是"精度升级"</h2>
+    <table>
+      <thead><tr><th>场景</th><th>纯向量</th><th>增强检索</th></tr></thead>
+      <tbody>
+        <tr><td>错误码 E-4012</td><td>❌</td><td>✅</td></tr>
+        <tr><td>Q3 营收数据</td><td>❌</td><td>❌</td></tr>
+        <tr><td>版本号 OB-4.2.1</td><td>✅</td><td>✅</td></tr>
+        <tr><td>函数名 DBMS_HYBRID_SEARCH</td><td>❌</td><td>✅</td></tr>
+        <tr><td>纯语义"优化查询性能"</td><td>❌</td><td>❌ 反而更差</td></tr>
+      </tbody>
+    </table>
+    <p><strong>汇总：纯向量 1/5，增强检索 3/5。</strong>它救的是"字面精确"的查询（错误码、函数名、版本号），救不了纯语义跑偏。把它当"更好"用，就会在纯语义场景翻车。</p>
+  </section>
+
+  <section>
+    <h2>生产三变量（都不是模型问题）</h2>
+    <table>
+      <thead><tr><th>变量</th><th>作用</th><th>怎么调</th></tr></thead>
+      <tbody>
+        <tr><td><strong>工具描述</strong></td><td>决定 Agent 生成的查询词</td><td>写清楚，别让模型自己猜</td></tr>
+        <tr><td><strong>top_k</strong></td><td>召回数量换精度</td><td>1 → 3 → 5 → 8，不是越大越好</td></tr>
+        <tr><td><strong>增量更新</strong></td><td>知识库能不能持续长</td><td>写入后条数随之增长</td></tr>
+      </tbody>
+    </table>
+    <p>三件事全落在公式 <code>Agent 能力 = 模型能力 × 数据质量 + 流程编排</code> 的<strong>最后一项</strong>。</p>
+  </section>
+
+  <section>
+    <h2>环境坑清单</h2>
+    <ul>
+      <li><strong>模型名写死。</strong> 课程脚本里写死 <code>deepseek-ai/DeepSeek-V3</code>，换 Key 后 404 → 改成自己 Key 可用的模型（如 <code>qwen3.7-flash</code>）即可。</li>
+      <li><strong>先看报错是不是环境</strong>（权限、模型名），再动代码——跑开源项目时"跑不通"和"写错了"经常不是一回事。</li>
+      <li><strong>异步索引。</strong> 写入后立刻查可能返回"无结果"，隔几秒重跑即正常（与 d2 同源现象）。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>给 Agent 的工具协议</h2>
+    <pre><code>list_allowed_files(pattern)
+  → describe_file(path, format_options)
+  → preview_file(path, limit)      # 必须 LIMIT
+  → query_files(sql)
+  → export_query(sql, target)
+  → verify_export(target)</code></pre>
+    <p>准则：先发现再读取；先 DESCRIBE 再看列；先小样本再全量；文件变化/权限错误立即停，不自动放宽配置。</p>
+  </section>
+
+  <footer class="lesson-foot">
+    <p>Easy Data × AI · 速查表 · 创建于 2026-09-28</p>
+  </footer>
+
+</div>
+</body>
+</html>
