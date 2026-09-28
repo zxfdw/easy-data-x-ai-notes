@@ -165,8 +165,53 @@
         <section class="note-section">
           <h2>实践成果与笔记</h2>
           <div class="prose">
-<h2>待开始</h2>
-<p>本 Task 尚未开始。完成后会在这里留下实践成果与学习笔记。</p>
+<blockquote>⏰ 截止时间：2026-09-29 03:00 📖 道篇 P3《让 Agent 真正记住你》+ 产业应用篇 I4《File SQL for AI Agent》</blockquote>
+<h2>01 实践成果</h2>
+<h3>I4 · File SQL for AI Agent</h3>
+<p>I4 没有配套脚本（是设计文档），按课程的"发现 → 描述 → 查询 → 关联 → 导出"五步闭环自建了可跑实现（<code>code/D5/t5_file_sql.py</code>）。</p>
+<table><thead><tr><th>步骤</th><th>做什么</th><th>结果</th></tr></thead><tbody><tr><td>发现</td><td><code>glob</code> 枚举受控目录内文件</td><td>✅ 找到 orders.csv 等</td></tr><tr><td>描述</td><td>执行前确定列名与类型</td><td>✅ order_id/customer_id/status=VARCHAR，amount=DOUBLE</td></tr><tr><td>查询</td><td>单文件聚合（GROUP BY + HAVING）</td><td>✅ C01 1018.0 / C02 339.7 / C04 1500.0</td></tr><tr><td>关联</td><td>跨文件 LEFT JOIN</td><td>✅ 5 条结果，带客户等级</td></tr><tr><td>导出</td><td>COPY TO（不覆盖 + 临时文件原子发布）</td><td>✅ export.csv，临时文件已清理</td></tr><tr><td>安全</td><td>Path Guard 拦越界路径</td><td>✅ 拒绝 /etc/passwd</td></tr></tbody></table>
+<h3>P3 · PowerContext 记忆系统</h3>
+<p>装了 PowerContext（v1.0.0，课里标注"开发中"），起本地 Server（sqlite 后端），用<strong>阿里云 DashScope</strong>（<code>qwen3.7-flash</code> 生成 + <code>text-embedding-v4</code> 嵌入）驱动记忆读写。</p>
+<table><thead><tr><th>环节</th><th>做什么</th><th>结果</th></tr></thead><tbody><tr><td>写入</td><td>按 P3 三类框架写 6 条记忆</td><td>✅ 语义 2 / 情景 2 / 程序 2</td></tr><tr><td>列出</td><td>列出 scope 内全部条目</td><td>✅ 共 6 条</td></tr><tr><td>检索</td><td>语义查询 3 组</td><td>✅ 全部命中，mode=hybrid</td></tr></tbody></table>
+<h3>真实输出摘录</h3>
+<p><strong>File SQL 五步闭环</strong></p>
+<pre><code>【步骤 3】单文件查询：已付款订单按客户汇总
+    C04    订单 1 笔  合计 1500.0
+    C01    订单 2 笔  合计 1018.0
+    C02    订单 3 笔  合计 339.7
+
+【步骤 5】导出结果（COPY TO：不覆盖、先临时后原子发布）
+  已导出 → export.csv（原子发布，临时文件已清理：True）
+
+【安全边界】Path Guard 拦截越界路径
+  ✅ 已拒绝：路径越界，拒绝：/etc/passwd</code></pre>
+<p><strong>PowerContext 记忆检索</strong></p>
+<pre><code>【1】写入记忆（语义 / 情景 / 程序）
+  [semantic  ] 张博偏好简洁的回答，不喜欢过度铺垫和客套
+  [episodic  ] 上次微球注册变更的难题，用「等粒径」统一型号口径解决了
+  [procedural] 遇到多步骤任务，先列出步骤大纲再逐步执行
+
+【2】列出记忆条目
+  共 6 条
+
+【3】检索
+  查询「回答风格偏好」→ 命中 2 条 (mode=hybrid)
+      · score=0.033  张博偏好简洁的回答，不喜欢过度铺垫和客套
+  查询「微球注册怎么解决的」→ 命中 3 条 (mode=hybrid)
+      · score=0.033  上次微球注册变更的难题，用「等粒径」统一型号口径解决了</code></pre>
+<hr>
+<h2>02 这次的体会</h2>
+<p><strong>1. 记忆的难点不在"存"，在"忘"——P3 这句话我这次体会到了。</strong></p>
+<p>写入太容易了：我往 PowerContext 里塞了 6 条，一次全进。但检索"回答风格偏好"时，它把"回答代码问题时先解释再给示例"也一并捞了回来（score 0.032，仅次于正确的那条 0.033）。这两条都跟"回答"沾边，语义上确实近——可如果 Agent 拿着这条去执行，就会把一条<strong>程序记忆（怎么答）</strong>误当成<strong>用户偏好（要什么风格）</strong>。所以 P3 才说"难的是忘"：不是记不住，是记多了以后<strong>分不清哪条该在这时候想起来</strong>。</p>
+<p><strong>2. File SQL 真正的价值在"零建表"，而不在语法像 SQL。</strong></p>
+<p>我这次刻意没落任何持久表——<code>read_csv</code> 把文件当成语句级临时关系，查完就散。对照 Task 4 学的"I1 数据库"，区别一下就清楚了：I1 解决"数据长期存哪、怎么被四种方式查到"，I4 解决"一次性文件怎么不折腾地查掉"。两件事不冲突，是两种场景。文档里那句"扫描对象存储或跨节点文件 → 用专门的外表方案"划的就是这条线。</p>
+<p><strong>3. 安全不是附加项，是 File SQL 能不能用的前提。</strong></p>
+<p>I4 用一整节讲 Path Guard，我照做时才发现那条检查链一点都不多余：我自己写的实现里，如果不做 <code>realpath</code> + 目录边界 + 普通文件检查，<code>/etc/passwd</code> 这种路径就直接被 <code>read_csv</code> 吞进去了。<strong>"只读"不等于"安全"</strong>——任意文件读取本身就能泄露密钥和配置。这条对我手上的研发知识库直接相关。</p>
+<p><strong>4. 一个环境上的插曲，值得记。</strong></p>
+<p>PowerContext 是完整服务端产品，课里标"开发中"，装起来要补十来个依赖（otel、pyobvector、sqlite-vec、aiosqlite、apscheduler、casbin、fastmcp……），还要配推理模型。配好之后有两个坑：①模型名必须带 provider 前缀（<code>openai:qwen3.7-flash</code>，光写模型名会报 Unknown model）②<code>embedding_model</code>、<code>embedding_profile_id</code>、<code>embedding_dimension</code> 三个必须<strong>一起</strong>配，缺一个就启动失败。这些都不在课程正文里，是实际上手才撞到的。</p>
+<p><strong>5. 顺带一个我自己犯的错。</strong> 起服务时我写了 <code>pkill -f "powercontext server"</code>，结果这个模式<strong>把正在执行它的那个 shell 自己也匹配上了</strong>，一次次自杀，白折腾了半小时。改成 <code>pkill -f "[p]owercontext server"</code> 才对。工程上一个很小的点：<strong>杀进程的匹配串，别把自己的命令行也算进去。</strong></p>
+<hr>
+<p><em>创建：2026-09-28</em></p>
           </div>
         </section>
 
