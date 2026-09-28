@@ -42,14 +42,14 @@ TASKS = [
     dict(no="05", code="TASK 5", slug="task-5", name="记忆系统与 File SQL",
          plan=("3 天", "09-29 03:00"), record="2026.09.28", status="已完成",
          diff=4,
-         lesson=("第 6 课", "lessons/0006-what-to-remember.html", "记什么容易，忘什么才难"),
+         lesson=("第 5 课", "lessons/0005-what-to-remember.html", "记什么容易，忘什么才难"),
          read=["P3 让 Agent 真正记住你", "I4 File SQL for AI Agent"],
          deck="理解记忆系统存储关键 value 的原理，并体验 PowerContext 的记忆能力。",
          req="理解记忆系统原理并安装 PowerContext；完成一条 select from read_csv 流程。"),
     dict(no="06", code="TASK 6", slug="task-6", name="Agentic RAG 与 AI 列",
          plan=("3 天", "10-02 03:00"), record="2026.09.28", status="已完成",
          diff=4,
-         lesson=("第 5 课", "lessons/0005-who-decides-to-search.html", "到底该不该查：Agent 自己说了算"),
+         lesson=("第 6 课", "lessons/0006-who-decides-to-search.html", "到底该不该查：Agent 自己说了算"),
          read=["D3 实践出真知：Agentic RAG 实战", "I5 AI 列与派生数据维护"],
          deck="走通 Agentic RAG 的完整链路，并在向量数据库中创建与使用 AI 列。",
          req="跑通 code/D3 的 d3_1 至 d3_6；在 pyseekdb 创建并使用 AI 列。"),
@@ -389,7 +389,8 @@ def main():
     open(os.path.join(ROOT, 'index.html'), 'w', encoding='utf-8').write(build_index())
     open(os.path.join(ROOT, 'favicon.svg'), 'w', encoding='utf-8').write(FAVICON)
     srcs = {'task-1': 'task1-环境准备与课前导读.md', 'task-2': 'task2-场景识别与RAG产品设计.md',
-            'task-3': 'task3-任务笔记.md', 'task-4': 'task4-任务笔记.md'}
+            'task-3': 'task3-任务笔记.md', 'task-4': 'task4-任务笔记.md',
+            'task-5': 'task5-任务笔记.md', 'task-6': 'task6-任务笔记.md'}
     for t in TASKS:
         d = os.path.join(ROOT, 'notes', t['slug'])
         os.makedirs(d, exist_ok=True)
