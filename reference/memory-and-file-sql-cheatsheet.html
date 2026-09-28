@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>速查表 · 记忆系统与 File SQL</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="lesson-nav" aria-label="课程导航"><a class="home" href="../index.html">&larr; 学习主页</a><span class="spacer"></span><a href="../lessons/0006-what-to-remember.html">&larr; 第 6 课</a><span class="disabled">下一课 &rarr;</span></nav>
+
+  <header class="lesson-head">
+    <p class="kicker">速查表 · Easy Data × AI</p>
+    <h1>记忆系统与 File SQL</h1>
+    <p class="objective">一页纸：三类记忆的分工与缺失判断、记忆读写的两种模式、File SQL 五步闭环与安全红线。</p>
+  </header>
+
+  <section>
+    <h2>三类记忆</h2>
+    <table>
+      <thead><tr><th>类型</th><th>存什么</th><th>类比</th><th>举例</th></tr></thead>
+      <tbody>
+        <tr><td><strong>语义</strong></td><td>事实和知识</td><td>百科全书</td><td>"用户是 Python 开发者"</td></tr>
+        <tr><td><strong>情景</strong></td><td>过去的经历</td><td>日记本</td><td>"上次用 Docker 方案解决了部署问题"</td></tr>
+        <tr><td><strong>程序</strong></td><td>行为规则</td><td>操作手册</td><td>"回答代码问题时先解释再给示例"</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <p><strong>诊断口诀：</strong>Agent"不够懂我"时先问缺口——不记得事实（语义）？不记得经验（情景）？不懂规矩（程序）？三种缺失，三种修法。</p>
+      <p><strong>唯一可自我修改的是程序记忆</strong>——这就是"从反馈中学习"的机制，也是下一期 Skill 的前身。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>写入与读取</h2>
+    <table>
+      <thead><tr><th>环节</th><th>模式</th><th>好处</th><th>代价</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="2">写入</td><td>实时：对话中主动判断</td><td>透明，用户可感知</td><td>占用对话推理资源</td></tr>
+        <tr><td>异步：结束后后台提炼</td><td>不干扰体验</td><td>写入有延迟</td></tr>
+        <tr><td>读取</td><td>检索</td><td>把"想起来"变成一次检索问题</td><td>检索不准 = 记忆等于没有</td></tr>
+      </tbody>
+    </table>
+    <p><strong style="color:#b45309">⚠️ 实测教训</strong>：写入极容易，检索才是难点。我写入 6 条后查"回答风格偏好"，把程序记忆（怎么答，0.032）和语义记忆（要什么，0.033）一起捞了回来——<strong>分数几乎一样，类别却完全不同</strong>。所以"忘"（降权、过期、分类）比"记"更考验设计。</p>
+  </section>
+
+  <section>
+    <h2>File SQL 五步闭环</h2>
+    <table>
+      <thead><tr><th>步骤</th><th>函数</th><th>要点</th></tr></thead>
+      <tbody>
+        <tr><td>1 发现</td><td><code>glob</code></td><td>只列路径不读内容，不猜文件名</td></tr>
+        <tr><td>2 描述</td><td><code>DESCRIBE</code></td><td>执行前确定列名与类型</td></tr>
+        <tr><td>3 查询</td><td><code>read_csv(...)</code></td><td>语句级临时关系，零建表</td></tr>
+        <tr><td>4 关联</td><td><code>JOIN read_parquet(...)</code></td><td>跨格式 JOIN，Reader 只产批次</td></tr>
+        <tr><td>5 导出</td><td><code>COPY ... TO</code></td><td>不覆盖、先临时后原子发布</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <p style="text-align:center"><strong>为什么 Schema 必须在执行前确定？</strong></p>
+      <p>客户端收第一行结果前就得知道有哪些列，所以文件扫描必须接入 SQL 的编译期与执行计划——这正是"Reader 与 SQL 引擎职责分离"的原因。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>安全红线（Path Guard 检查链）</h2>
+    <pre><code>功能是否启用
+  → secure_file_priv 是否配置
+  → 路径规范化与 realpath
+  → 是否位于允许根目录
+  → 是否为普通文件
+  → 以只读、安全标志打开
+  → 对文件描述符再次校验</code></pre>
+    <p><strong>必须拒绝：</strong><code>..</code> 逃逸、前缀碰撞绕过、符号链接跳白名单、目录/FIFO/设备文件，以及"从数据库服务器读客户端本地路径"。</p>
+    <p><strong style="color:#b45309">⚠️ 红线</strong>：只读 ≠ 安全。任意文件读取就能泄露密钥与配置。</p>
+  </section>
+
+  <section>
+    <h2>何时用 / 何时别用</h2>
+    <table>
+      <thead><tr><th>场景</th><th>建议</th></tr></thead>
+      <tbody>
+        <tr><td>临时查看上传的 CSV</td><td>✅ 用 File SQL</td></tr>
+        <tr><td>两份本地中小文件做一次关联</td><td>✅ 用 File SQL</td></tr>
+        <tr><td>数据要长期复用、索引、事务</td><td>❌ 导入正式表</td></tr>
+        <tr><td>扫描对象存储 / 跨节点文件</td><td>❌ 用专门外表/湖仓方案</td></tr>
+        <tr><td>复杂嵌套 JSON / Excel</td><td>❌ 先专用工具预处理</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer class="lesson-foot">
+    <p>Easy Data × AI · 速查表 · 创建于 2026-09-28</p>
+  </footer>
+
+</div>
+</body>
+</html>
