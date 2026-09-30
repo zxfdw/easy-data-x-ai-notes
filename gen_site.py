@@ -54,8 +54,9 @@ TASKS = [
          deck="走通 Agentic RAG 的完整链路，并在向量数据库中创建与使用 AI 列。",
          req="跑通 code/D3 的 d3_1 至 d3_6；在 pyseekdb 创建并使用 AI 列。"),
     dict(no="07", code="TASK 7", slug="task-7", name="Skill 与上下文工程",
-         plan=("3 天", "10-05 03:00"), record=None, status="待开始",
-         diff=None,
+         plan=("3 天", "10-05 03:00"), record="2026.09.30", status="已完成",
+         diff=4,
+         lesson=("第 7 课", "lessons/0007-skill-as-data.html", "Skill 不是更长的提示词"),
          read=["P4 Skill 与 Agent 知识管理", "I6 上下文工程概述"],
          deck="理解 Agent 上下文工程的核心概念与工作流程，实践外部上下文管理工具。",
          req="理解上下文工程核心概念；基于 MCP、Skills 与 Agent Plugins 实践，以 PowerContext 为例完成安装与调用。"),
@@ -390,7 +391,8 @@ def main():
     open(os.path.join(ROOT, 'favicon.svg'), 'w', encoding='utf-8').write(FAVICON)
     srcs = {'task-1': 'task1-环境准备与课前导读.md', 'task-2': 'task2-场景识别与RAG产品设计.md',
             'task-3': 'task3-任务笔记.md', 'task-4': 'task4-任务笔记.md',
-            'task-5': 'task5-任务笔记.md', 'task-6': 'task6-任务笔记.md'}
+            'task-5': 'task5-任务笔记.md', 'task-6': 'task6-任务笔记.md',
+            'task-7': 'task7-任务笔记.md'}
     for t in TASKS:
         d = os.path.join(ROOT, 'notes', t['slug'])
         os.makedirs(d, exist_ok=True)

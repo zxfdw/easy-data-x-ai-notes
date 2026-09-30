@@ -75,7 +75,7 @@
             <span class="chev" aria-hidden="true"></span>
           </summary>
           <div class="tree-kids">
-            <span class="tree-link is-locked"><span>任务笔记</span><span>未开始</span></span>
+            <a class="tree-link" href="../task-4/"><span>任务笔记</span><span aria-hidden="true">↗</span></a>
             <span class="tree-read">D2 统一 AI Native 数据层实战</span>
             <span class="tree-read">I3 SQL × AI 与 AI Functions</span>
           </div>
@@ -87,7 +87,7 @@
             <span class="chev" aria-hidden="true"></span>
           </summary>
           <div class="tree-kids">
-            <span class="tree-link is-locked"><span>任务笔记</span><span>未开始</span></span>
+            <a class="tree-link" href="../task-5/"><span>任务笔记</span><span aria-hidden="true">↗</span></a>
             <span class="tree-read">P3 让 Agent 真正记住你</span>
             <span class="tree-read">I4 File SQL for AI Agent</span>
           </div>
@@ -99,7 +99,7 @@
             <span class="chev" aria-hidden="true"></span>
           </summary>
           <div class="tree-kids">
-            <span class="tree-link is-locked"><span>任务笔记</span><span>未开始</span></span>
+            <a class="tree-link" href="../task-6/"><span>任务笔记</span><span aria-hidden="true">↗</span></a>
             <span class="tree-read">D3 实践出真知：Agentic RAG 实战</span>
             <span class="tree-read">I5 AI 列与派生数据维护</span>
           </div>
@@ -111,7 +111,7 @@
             <span class="chev" aria-hidden="true"></span>
           </summary>
           <div class="tree-kids">
-            <span class="tree-link is-locked"><span>任务笔记</span><span>未开始</span></span>
+            <a class="tree-link is-current" href="../task-7/"><span>任务笔记</span><span aria-hidden="true">↗</span></a>
             <span class="tree-read">P4 Skill 与 Agent 知识管理</span>
             <span class="tree-read">I6 上下文工程概述</span>
           </div>
@@ -151,8 +151,8 @@
           <ul class="note-meta">
             <li><span class="k">计划</span><span class="v">3 天</span></li>
             <li><span class="k">截止</span><span class="v">10-05 03:00</span></li>
-            <li><span class="k">状态</span><span class="v">待开始</span></li>
-            <li><span class="k">更新</span><span class="v">—</span></li>
+            <li><span class="k">状态</span><span class="v">已完成</span></li>
+            <li><span class="k">更新</span><span class="v">2026.09.30</span></li>
           </ul>
         </header>
 
@@ -165,13 +165,92 @@
         <section class="note-section">
           <h2>实践成果与笔记</h2>
           <div class="prose">
-<h2>待开始</h2>
-<p>本 Task 尚未开始。完成后会在这里留下实践成果与学习笔记。</p>
+<blockquote>⏰ 截止时间：2026-10-05 03:00 📖 道篇 P4《Skill 与 Agent 知识管理》+ 产业应用篇 I6《上下文工程概述》</blockquote>
+<h2>01 实践成果</h2>
+<h3>材料情况</h3>
+<ul><li><strong>P4</strong>（道篇）：完整课程稿，讲 Skill 是什么、碎片化困境、检索问题、与 MCP 的关系，并附「同一个 Skill 如何在不同 Coding Agent 中落地」的互操作章节。</li><li><strong>I6</strong>（产业篇）：课程页标注<strong>「正在开发中」</strong>，只有方向与共建边界说明（Source / Memory / PreparedContext / Handoff 的职责边界等），<strong>无配套脚本</strong>。故动手项以 X2、X5 两个扩展示例 + PowerContext 安装调用为主。</li></ul>
+<h3>示例代码跑通</h3>
+<table><thead><tr><th>目录</th><th>做什么</th><th>结果</th></tr></thead><tbody><tr><td><code>code/X2</code></td><td>Skill 结构化管理：SKILL.md 解析 → seekdb 存储 → 混合检索按需加载</td><td>✅ 入库 1 Skill / 9 规则 / 2 示例</td></tr><tr><td><code>code/X2/x2_1_compare_context.py</code></td><td>全量注入 vs 按需加载的上下文开销对比</td><td>✅ <strong>省 ~76%</strong> 上下文（573 → 135 token）</td></tr><tr><td><code>code/X5/mcp_skill_server.py</code></td><td>从零实现最小 MCP Server，把 code-review Skill 包成 <code>review_code_diff</code> 工具</td><td>✅ stdio 端到端调通</td></tr><tr><td><code>code/X5</code> 单测</td><td>防止「CI 全绿但干净环境导入不了」</td><td>✅ 1 passed</td></tr><tr><td>PowerContext</td><td>Task 7 要求「以 PowerContext 为例完成安装和调用」</td><td>✅ 装起 + 写入/列出/检索跑通</td></tr></tbody></table>
+<h3>真实输出摘录</h3>
+<p><strong>X2 · Skill 上下文开销对比（seekdb 混合检索）</strong></p>
+<pre><code>用户请求: 帮我写一份 REST API 接口文档
+
+【方式一】全量注入
+  加载 Skill 数: 1
+  上下文字符数: 1,721
+  估算 Token 数: ~573
+
+【方式二】按需加载 (seekdb hybrid search)
+  上下文字符数: 405
+  估算 Token 数: ~135
+
+  节省上下文: ~76%
+
+按需加载上下文预览（前 500 字符）:
+----------------------------------------
+## Skill: api-doc-writing
+Write clear and consistent API documentation following team standards.
+### Key Rules
+- Version prefix required: /v1/users, not /users
+- Every parameter must have: name, type, required, description
+- Use nouns for resources, not verbs
+- Include at least one success and one error example
+- Mark optional parameters explicitly</code></pre>
+<p><strong>X5 · MCP Server 端到端（stdio：list_tools + call_tool）</strong></p>
+<pre><code>== initialize OK ==
+== tools ==
+  - review_code_diff: Review a code diff according to the code-review Skill checklist.
+== call_tool review_code_diff ==
+# Code Review Result
+## Focus
+correctness
+## Input Summary
+Received diff with 15 characters.
+## Review Checklist
+1. Correctness
+2. Maintainability
+3. Security
+4. Tests
+5. Compatibility
+6. Project conventions</code></pre>
+<p><strong>PowerContext · 记忆写入 → 列出 → 检索</strong></p>
+<pre><code>SERVER_READY after 13s
+默认 scope: scp_64daekbsf2m8mxgyj4s3nr7raf
+【1】写入记忆（语义 / 情景 / 程序）→ 6 条
+【2】列出记忆条目 → 共 6 条
+【3】检索（mode=hybrid）
+  查询「回答风格偏好」→ 命中 2 条
+      · score=0.033  张博偏好简洁的回答，不喜欢过度铺垫和客套
+      · score=0.032  回答代码类问题时，先给解释再给示例
+  查询「微球注册怎么解决的」→ 命中 3 条
+      · score=0.033  上次微球注册变更的难题，用「等粒径」统一型号口径解决了</code></pre>
+<h3>环境坑（课程正文未载）</h3>
+<p>PowerContext 在主环境里<strong>起不来</strong>。排查下来是包版本硬冲突：</p>
+<ul><li><code>langchain-openai</code>（Task 6 的 RAGAS 拉进来的）要求 <code>openai&lt;3.0.0</code></li><li>而 PowerContext 依赖的 <code>pydantic-ai-slim 2.47</code> 要求 <code>openai&gt;=3.8.0</code></li></ul>
+<p>两者在同一环境无解，报错停在 <code>TypeError: Invalid http_client argument; Expected an instance of httpx.AsyncClient but got &lt;class 'httpx2.AsyncClient'&gt;</code>。</p>
+<p><strong>处理：</strong> 把 PowerContext 单独装进隔离环境（<code>pydantic-ai-slim 2.31.1</code> + <code>openai 2.54</code>，这个组合还在用普通 <code>httpx</code>，不触发冲突），不动已经跑通的 RAGAS 配置。</p>
+<p>另外 X5 的 <code>mcp_skill_server.py</code> 用的是 <code>mcp 1.x</code> 的 <code>FastMCP</code> 导入路径，而当前主环境装的是 <code>mcp 2.x</code>（已把 FastMCP 改名 MCPServer）。课程 <code>requirements.txt</code> 其实写了 <code>mcp[cli]&gt;=1.28.1,&lt;2</code>，是本地环境没按它锁定；同样用独立环境装 <code>mcp 1.x</code> 解决。</p>
+<hr>
+<h2>02 这次的体会</h2>
+<p><strong>1. Skill 不是"更长的提示词"，而是把程序记忆拿出来当数据管。</strong></p>
+<p>P4 里最让我改观的一句话是：Skill 是被<strong>外部化、结构化了的程序记忆</strong>。程序记忆是 Agent 脑子里"该怎么做"的规则，Skill 是把它写成书架上的操作手册。一旦写成文档，它就从"某个人或某个 Agent 专属"变成了<strong>可以被管理的数据</strong>；而只要是数据，前面几课讲的那套（存储、索引、检索、更新）就全回来了。</p>
+<p>X2 的对比最能说明这一点：同样的内容，全量塞进上下文要 573 token，用混合检索按需取只要 135 token，省了 76%。<strong>"要不要全量加载"从来不是提示词技巧问题，是检索问题。</strong></p>
+<p><strong>2. Skill 碎片化，和知识库分散是同一类问题。</strong></p>
+<p>P4 把碎片化分成三层：项目隔离、工具隔离、人员隔离。Cursor 的 Rules、Claude Code 的 CLAUDE.md、ChatGPT 的自定义指令，格式互不兼容，同一套经验要在三个地方写三遍。这跟 P2 说的"知识库分散、内容残缺、格式混乱是 RAG 效果不好的首因"是同一个根因：<strong>经验数据没有被结构化地管理</strong>。</p>
+<p>换个视角，解法就清楚了：把 Skill 当成和知识库一样的数据资产来管理。这不是写同步脚本能解决的工程问题，是数据管理问题。</p>
+<p><strong>3. 从 Skill 到 MCP：从"该怎么做"到"怎么被调用"。</strong></p>
+<p>Skill 解决的是"这件事该怎么做"，但不解决"怎么被不同客户端统一发现和调用"。X5 那个 50 行的 MCP Server 就是这一层：把 code-review 的经验包成一个有稳定名字、有清晰描述、有结构化参数的 <code>review_code_diff</code> 工具。P4 的判断是：Skill 还在快速迭代时写成文档最灵活，等它稳定了、要跨工具复用了，就考虑 MCP 化。这跟 Task 2 讲的"MCP Tool 要有稳定命名、清晰描述、结构化参数"完全是一条线。</p>
+<p><strong>4. 上下文工程的边界，是 I6 想划的那条线。</strong></p>
+<p>I6 虽然还在开发中，但它列的方向很清楚：Source、Memory、PreparedContext、Handoff 的职责边界，加上项目范围、相关性、上下文预算，<strong>上下文工程不等于"把更多内容塞进提示词"</strong>。这跟 X2 的对比实验正好互证：上下文是有限资源，关键不是塞得多，是取得准。</p>
+<p><strong>5. 最大的收获其实是"跑不通时先分清是环境问题还是代码问题"。</strong></p>
+<p>这次 Task 7 两个坑（PowerContext 的 openai 版本冲突、X5 的 mcp 大版本差异）都不是我代码写错了，而是<strong>依赖版本没对齐</strong>。课程 <code>requirements.txt</code> 里其实写明了 <code>mcp&gt;=1.28.1,&lt;2</code>，是本地环境跑偏了。这跟 Task 6 的体会接得上：跑开源项目时，"跑不通"经常先要判断环境，而不是直接改代码。</p>
+<hr>
+<p><em>创建：2026-09-30</em></p>
           </div>
         </section>
 
         <footer class="note-foot">
-          <span class="disabled">← 上一课</span>
+          <a href="../task-6/">← TASK 6</a>
           <a href="../../index.html#ledger">全部 Task ↑</a>
           <span class="disabled">下一课 →</span>
         </footer>

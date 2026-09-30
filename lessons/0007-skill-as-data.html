@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 7 课 · Skill 不是更长的提示词</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="lesson-nav" aria-label="课程导航"><a class="home" href="../index.html">&larr; 学习主页</a><span class="spacer"></span><a href="0006-who-decides-to-search.html">&larr; 第 6 课</a><a href="../reference/skill-and-context-cheatsheet.html">速查表 &rarr;</a></nav>
+
+  <header class="lesson-head">
+    <p class="kicker">Easy Data × AI · 第 7 课（对应 Task 7 · P4 + I6）</p>
+    <h1>Skill 不是更长的提示词</h1>
+    <p class="objective">学完这一课，你能把 Skill 从"我写的一段指令"，看成"一份要被存储、索引、检索的数据"——并知道它什么时候该从文档升级成 MCP 工具。</p>
+    <ul class="meta">
+      <li>预计耗时 <b>12 分钟</b></li>
+      <li>关联 <b>X2 / X5 / PowerContext</b></li>
+      <li>类型 <b>概念 + 实测 + 工程</b></li>
+    </ul>
+  </header>
+
+  <section>
+    <h2>先接上一课的话头</h2>
+    <p>第 5 课讲记忆时留了个伏笔：<strong>程序记忆</strong>是三种长期记忆里唯一一种 Agent 能自我修改的——"回答太长了"多说几次，Agent 给自己加一条"回答要简洁"的规则。</p>
+    <p>P4 换了个角度：这套"该怎么做"的规则，能不能不只存在 Agent 脑子里，而是<strong>写成一份文档，放到书架上</strong>？</p>
+    <div class="note">
+      <p><strong>Skill = 被外部化、结构化了的程序记忆。</strong>程序记忆是 Agent"内化"的行为规则，Skill 是把它"外化"成可以管理、共享、检索的文档资产。</p>
+    </div>
+    <p>这句话为什么重要？因为一旦经验变成了文档，它就不再是某个人或某个 Agent 专属的，而是变成了<strong>可被管理的数据</strong>。而只要涉及数据管理，前面几课讲过的那套（存储、索引、检索、更新）就全都回来了。</p>
+  </section>
+
+  <section>
+    <h2>省 76% 上下文，靠的不是"提示词技巧"</h2>
+    <p>X2 这个示例做的事很朴素：把一份 <code>SKILL.md</code> 解析进 seekdb，然后对比两种加载方式。</p>
+    <table>
+      <thead>
+        <tr><th>方式</th><th>上下文字符</th><th>估算 Token</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>全量注入（把 Skill 一股脑塞进提示词）</td><td>1,721</td><td>~573</td></tr>
+        <tr><td>按需加载（seekdb 混合检索）</td><td>405</td><td>~135</td></tr>
+      </tbody>
+    </table>
+    <p>同样的内容，按需取只要 <strong>~135 token，省掉约 76%</strong>。而且取回来的不是整篇，是“描述 + 最相关的 5 条规则”。</p>
+    <div class="note">
+      <p style="text-align:center;font-size:1.1em"><strong>"要不要全量加载"从来不是提示词技巧，是检索问题。</strong></p>
+      <p>这和第 3 课讲的混合搜索是同一套机制，区别只是检索对象从“知识文档”换成了“技能文档”。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>碎片化：知识库分散的老毛病，换了身衣服</h2>
+    <p>P4 把 Skill 碎片化拆成三层，每一层都很眼熟：</p>
+    <table>
+      <thead>
+        <tr><th>层面</th><th>表现</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>项目隔离</strong></td><td>项目 A 攒的规则，开新项目 B 要手动搬</td></tr>
+        <tr><td><strong>工具隔离</strong></td><td>Cursor 的 <code>.mdc</code>、Claude Code 的 <code>CLAUDE.md</code>、ChatGPT 的自定义指令，格式互不兼容</td></tr>
+        <tr><td><strong>人员隔离</strong></td><td>同事的好规则只能靠发消息 + 手动粘贴，半年后各自分叉</td></tr>
+      </tbody>
+    </table>
+    <p>把它和第 2 课对照一下就明白了：<strong>知识库分散 → RAG 检索不到 → AI 答不好；Skill 分散 → Agent 找不到最佳技能 → 行为不专业。</strong>同一类问题，同一个根因：经验数据没有被结构化地管理。</p>
+    <p>换个视角，解法就清楚了：<strong>别把它当工程问题</strong>（写同步脚本、格式转换器，永远在追赶新格式），<strong>把它当数据管理问题</strong>：像管理知识库一样管理技能库。</p>
+  </section>
+
+  <section>
+    <h2>从 Skill 到 MCP：解决"怎么被调用"</h2>
+    <p>Skill 解决的是"这件事该怎么做"，但不解决"怎么被不同客户端统一发现、统一调用"。X5 那个 50 行的 MCP Server 就是补这一层：</p>
+    <ol>
+      <li><strong>稳定名字</strong>：<code>review_code_diff</code>，不是 <code>helper</code></li>
+      <li><strong>清晰描述</strong>：告诉 Agent 什么时候该用它</li>
+      <li><strong>结构化参数</strong>：<code>diff</code>、<code>focus</code></li>
+      <li><strong>可验证返回</strong>：按严重程度分级的审查结果</li>
+    </ol>
+    <p>实测端到端跑通：起 stdio server → <code>list_tools</code> 发现工具 → <code>call_tool</code> 调用，返回结构化审查报告。</p>
+    <div class="note">
+      <p>P4 的判断是：<strong>Skill 还在快速迭代时，写成文档最灵活；等它稳定了、要跨工具复用了，就考虑 MCP 化。</strong>文档 → 工具的升级点，是"稳定"和"要被多方调用"。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>上下文工程的边界，是 I6 想划的那条线</h2>
+    <p>I6（上下文工程概述）目前在课程里还标着“开发中”，但它列出的方向已经把话说清楚了：要理清 <strong>Source、Memory、PreparedContext、Handoff</strong> 各自的职责边界，再谈项目范围、相关性、上下文预算。</p>
+    <p>一句话：<strong>上下文工程 ≠ 把更多内容塞进提示词。</strong></p>
+    <p>这跟 X2 的对比实验正好互证：上下文是有限资源，关键不是“塞得多”，是“取得准”。第 1 课那句公式又出现了：<strong>Agent 能力 = 模型能力 × 数据质量 + 流程编排</strong>，这次落在“数据质量”上。</p>
+  </section>
+
+  <section>
+    <h2>一个顺手的教训：跑不通，先看环境</h2>
+    <p>这次两个坑都不是代码写错，是依赖版本没对齐。</p>
+    <p class="ask"><span class="label">先自己猜</span>PowerContext 报 <code>TypeError: Expected an instance of httpx.AsyncClient but got httpx2.AsyncClient</code>，你会先改代码，还是先查依赖？</p>
+    <p>查下来是硬冲突：<code>langchain-openai</code>（第 6 课 RAGAS 拉的）要求 <code>openai&lt;3</code>，而 PowerContext 依赖的 <code>pydantic-ai-slim 2.47</code> 要求 <code>openai&gt;=3.8</code>——同一环境无解。把 PowerContext 单独放进隔离环境就好了。</p>
+    <p>另一个：X5 用 <code>mcp 1.x</code> 的 <code>FastMCP</code> 导入路径，而本地装的是 <code>mcp 2.x</code>（已改名）。课程 <code>requirements.txt</code> 其实写了 <code>mcp[cli]&gt;=1.28.1,&lt;2</code>，是本地环境没按它锁定。<strong>先看报错是不是环境（版本、权限、模型名）问题，再去动代码</strong>，这条在第 6 课也吃过一次。</p>
+  </section>
+
+  <section>
+    <h2>自测：三个问题</h2>
+    <p>试着不看上面作答（<strong>提取练习</strong>比重读一遍有效得多）。</p>
+
+    <div class="quiz q" data-answer="1">
+      <p><strong>1. "Skill 是被外部化、结构化的程序记忆"，重点在哪半句？</strong></p>
+      <div class="opts">
+        <button>Skill 就是把系统提示词写得更长更全</button>
+        <button>一旦写成文档，它就变成了可被管理的数据</button>
+        <button>Skill 只能由平台官方提供，个人写不了</button>
+      </div>
+      <p class="feedback" hidden></p>
+    </div>
+
+    <div class="quiz q" data-answer="2">
+      <p><strong>2. X2 里按需加载省 76% 上下文，说明？</strong></p>
+      <div class="opts">
+        <button>只要把提示词压缩一下，就能省下这些开销</button>
+        <button>Skill 内容写得短，是省上下文的关键</button>
+        <button>加载多少 Skill，本质是一个检索问题</button>
+      </div>
+      <p class="feedback" hidden></p>
+    </div>
+
+    <div class="quiz q" data-answer="0">
+      <p><strong>3. 一个 Skill 什么时候该从文档升级成 MCP 工具？</strong></p>
+      <div class="opts">
+        <button>当它足够稳定、且需要被跨工具统一调用时</button>
+        <button>只要写完第一版就应该立刻 MCP 化</button>
+        <button>文档形式的 Skill 已经过时，一律要做成工具</button>
+      </div>
+      <p class="feedback" hidden></p>
+    </div>
+
+    <p class="ask"><span class="label">提示</span>三题答完再看反馈；答错比答对更有价值：说明那里正是你要补的。</p>
+  </section>
+
+  <section>
+    <h2>接到你的实际场景</h2>
+    <p>把这一课接到自己的 AI 工作流上：</p>
+    <ol>
+      <li><strong>把散落的规则收拢成“技能库”。</strong> Cursor Rules、CLAUDE.md、各种 Prompt 模板，先盘点有多少份、存在哪、谁维护，这本身就是 P4 的课后行动题。</li>
+      <li><strong>规则多到塞不下时，别硬塞。</strong> 用检索按需加载，而不是把所有 Skill 都堆进提示词。</li>
+      <li><strong>稳定的流程再 MCP 化。</strong> 还在天天改的先做成 Skill 文档；跑顺了、要让别的工具也能调用，再包成工具。</li>
+      <li><strong>报错先分环境还是代码。</strong> 版本冲突、权限、模型名这三类，占了"跑不通"的一大半。</li>
+    </ol>
+  </section>
+
+  <footer class="lesson-foot">
+    <p>Easy Data × AI · 第 7 课 · 创建于 2026-09-30</p>
+  </footer>
+
+</div>
+</body>
+</html>

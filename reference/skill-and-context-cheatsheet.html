@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>速查表 · Skill 与上下文工程</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="lesson-nav" aria-label="课程导航"><a class="home" href="../index.html">&larr; 学习主页</a><span class="spacer"></span><a href="../lessons/0007-skill-as-data.html">&larr; 第 7 课</a><span class="disabled">下一课 &rarr;</span></nav>
+
+  <header class="lesson-head">
+    <p class="kicker">速查表 · Easy Data × AI</p>
+    <h1>Skill 与上下文工程</h1>
+    <p class="objective">一页纸：Skill 的四要素、碎片化的三层、Skill 检索与 RAG 的对应、Skill 何时升级成 MCP 工具。</p>
+  </header>
+
+  <section>
+    <h2>Skill 的四个必备要素</h2>
+    <table>
+      <thead><tr><th>要素</th><th>作用</th><th>反例</th></tr></thead>
+      <tbody>
+        <tr><td><strong>命名</strong></td><td>稳定、具体、可检索，供系统索引与路由</td><td><code>helper</code>、<code>docs</code>、<code>我的超强技能</code></td></tr>
+        <tr><td><strong>描述</strong></td><td>写清适用任务、触发场景、边界范围</td><td>"帮助写 API 文档"（太宽，不知何时该用）</td></tr>
+        <tr><td><strong>输入</strong></td><td>区分必填 / 可选，说明来源</td><td>全写成"最好有"，Agent 不知何时该追问</td></tr>
+        <tr><td><strong>示例</strong></td><td>最小样例校准行为与边界</td><td>只堆材料，不给"该拒答"的例子</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <p><strong>精神与 MCP Tool 一致：</strong>稳定名称做识别，清晰描述做触发，结构化参数做约束，示例校准行为。缺了这四样，Skill 就退化成一段散文——人读着有感觉，Agent 用起来不稳定。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>碎片化的三层与对应解法</h2>
+    <table>
+      <thead><tr><th>层面</th><th>表现</th><th>数据视角的解法</th></tr></thead>
+      <tbody>
+        <tr><td><strong>项目隔离</strong></td><td>项目 A 的规则，开新项目要手动搬</td><td rowspan="3">把 Skill 当数据资产管理：<br>统一存储 → 索引 → 语义检索 → 跨工具/项目/团队共享</td></tr>
+        <tr><td><strong>工具隔离</strong></td><td>Cursor / Claude Code / Copilot 格式互不兼容</td></tr>
+        <tr><td><strong>人员隔离</strong></td><td>同事的好规则只能手动粘贴，各自分叉</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <p><strong>根因对照：</strong>知识库分散 → RAG 检索不到 → AI 答不好；Skill 分散 → Agent 找不到最佳技能 → 行为不专业。<strong>同一类问题。</strong></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Skill 检索 ≈ RAG（复用同一套机制）</h2>
+    <table>
+      <thead><tr><th>维度</th><th>RAG（P2）</th><th>Skill 检索（P4）</th></tr></thead>
+      <tbody>
+        <tr><td>检索对象</td><td>知识文档</td><td>技能文档</td></tr>
+        <tr><td>机制</td><td>语义相似度召回</td><td>语义相似度召回</td></tr>
+        <tr><td>混合检索必要</td><td>"npm 包" 别召回 "Python 包"</td><td>精确匹配关键词的那部分同样重要</td></tr>
+        <tr><td>Agentic 判断</td><td>要不要搜 / 搜哪里 / 够不够好</td><td>这次请求要不要调 Skill</td></tr>
+      </tbody>
+    </table>
+    <p class="ask"><span class="label">记住一句</span>知识库管"事实数据"，记忆系统管"用户数据"，Skill 库管"经验数据"——底层都是存储、索引、检索、更新。</p>
+  </section>
+
+  <section>
+    <h2>Skill → MCP Tool：什么时候升级</h2>
+    <table>
+      <thead><tr><th>阶段</th><th>形态</th><th>适合场景</th></tr></thead>
+      <tbody>
+        <tr><td>快速迭代</td><td>Skill 文档（<code>SKILL.md</code>）</td><td>流程还在天天改，先写文档最灵活</td></tr>
+        <tr><td>稳定 + 跨端复用</td><td>MCP Tool（Server 暴露）</td><td>输入稳定、输出可结构化、要被多客户端统一调用</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <p><strong>升级判据：</strong>不是"写得越早越好"，而是<strong>"足够稳定" + "需要被统一发现和调用"</strong>。X5 的 <code>review_code_diff</code> 就是 code-review Skill 的 MCP 化结果。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>上下文工程三条红线</h2>
+    <ol>
+      <li><strong>不是塞得越多越好。</strong> 上下文是有限资源，全量注入 ≠ 效果更好（X2：按需加载省 ~76%）。</li>
+      <li><strong>先分清职责边界。</strong> Source / Memory / PreparedContext / Handoff 各管一段，别混在一起。</li>
+      <li><strong>跑不通先分环境还是代码。</strong> 版本冲突、权限、模型名，占了"跑不通"的一大半（本次 PowerContext 的 openai 版本冲突、X5 的 mcp 大版本差异都是这类）。</li>
+    </ol>
+  </section>
+
+  <footer class="lesson-foot">
+    <p>Easy Data × AI · 速查表 · 创建于 2026-09-30</p>
+  </footer>
+
+</div>
+</body>
+</html>
