@@ -61,15 +61,17 @@ TASKS = [
          deck="理解 Agent 上下文工程的核心概念与工作流程，实践外部上下文管理工具。",
          req="理解上下文工程核心概念；基于 MCP、Skills 与 Agent Plugins 实践，以 PowerContext 为例完成安装与调用。"),
     dict(no="08", code="TASK 8", slug="task-8", name="Agent 记忆系统开发",
-         plan=("3 天", "10-08 03:00"), record=None, status="待开始",
-         diff=None,
+         plan=("3 天", "10-08 03:00"), record="2026.10.02", status="已完成",
+         diff=4,
          read=["D4 记哪些、忘哪些", "I7 PowerContext 的设计与实现"],
+         lesson=("第 8 课", "lessons/0008-memory-is-data-management.html", "存下来容易，管起来才难"),
          deck="走通一个拥有完整记忆系统的 Agent 构建流程，理解其工业实现思路。",
          req="跑通 code/D4 的 d4_1 至 d4_4；学习 PowerContext 项目的设计。"),
     dict(no="09", code="TASK 9", slug="task-9", name="场景、总结与测评",
-         plan=("3 天", "10-11 03:00"), record=None, status="待开始",
-         diff=None,
+         plan=("3 天", "10-11 03:00"), record="2026.10.02", status="已完成",
+         diff=4,
          read=["P5 Agent 场景识别", "D5 课程总结", "I8 案例场景和测评构建"],
+         lesson=("第 9 课", "lessons/0009-measure-or-it-isnt-real.html", "量不出来，就不算落地"),
          deck="通过典型案例掌握测评基本方法，并实践上下文工程的实施效果评估。",
          req="了解上下文工程的场景应用与测评方法；用 PowerContext E2E 基于 Harbor 构建与迁移测评集。"),
 ]
@@ -392,7 +394,8 @@ def main():
     srcs = {'task-1': 'task1-环境准备与课前导读.md', 'task-2': 'task2-场景识别与RAG产品设计.md',
             'task-3': 'task3-任务笔记.md', 'task-4': 'task4-任务笔记.md',
             'task-5': 'task5-任务笔记.md', 'task-6': 'task6-任务笔记.md',
-            'task-7': 'task7-任务笔记.md'}
+            'task-7': 'task7-任务笔记.md',
+            'task-8': 'task8-任务笔记.md', 'task-9': 'task9-任务笔记.md'}
     for t in TASKS:
         d = os.path.join(ROOT, 'notes', t['slug'])
         os.makedirs(d, exist_ok=True)
