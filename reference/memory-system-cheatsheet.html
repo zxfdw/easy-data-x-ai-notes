@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>速查表 · Agent 记忆系统</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="lesson-nav" aria-label="课程导航"><a class="home" href="../index.html">&larr; 学习主页</a><span class="spacer"></span><a href="../lessons/0008-memory-is-data-management.html">&larr; 第 8 课</a><a href="../lessons/0009-measure-or-it-isnt-real.html">第 9 课 &rarr;</a></nav>
+
+  <header class="lesson-head">
+    <p class="kicker">速查表 · Easy Data × AI</p>
+    <h1>Agent 记忆系统</h1>
+    <p class="objective">一页纸：D4 八个脚本各管什么、记忆管理的四条工程红线、以及 I7 划出的工业接口边界。</p>
+  </header>
+
+  <section>
+    <h2>D4 八个脚本速查</h2>
+    <table>
+      <thead><tr><th>脚本</th><th>主题</th><th>一句话结论</th></tr></thead>
+      <tbody>
+        <tr><td><strong>d4_1</strong></td><td>ReAct 推理循环</td><td>Agent 自主决定调哪个工具、调几次；max_steps 是安全阀</td></tr>
+        <tr><td><strong>d4_2</strong></td><td>无记忆基线</td><td>每轮独立，重启即失忆，用户要反复自我介绍</td></tr>
+        <tr><td><strong>d4_3</strong></td><td>有记忆版本</td><td>记住身份与偏好，推荐落到个性化口径</td></tr>
+        <tr><td><strong>d4_4</strong></td><td>完整记忆 Agent</td><td>记忆跨进程持久化，交互式命令行</td></tr>
+        <tr><td><strong>d4_5</strong></td><td>多用户隔离</td><td>user_id 命名空间；<strong>过滤在查询构建阶段</strong></td></tr>
+        <tr><td><strong>d4_6</strong></td><td>记忆压缩</td><td>多条变一条换压缩比；画像 + 事实库分层</td></tr>
+        <tr><td><strong>d4_7</strong></td><td>冷热分层</td><td>冷数据必须移出热索引，不能只靠排序沉底</td></tr>
+        <tr><td><strong>d4_8</strong></td><td>记忆清理</td><td>KEEP → ARCHIVE → DELETE；硬删级联主库/向量/缓存</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>记忆管理四条工程红线</h2>
+    <ol>
+      <li><strong>隔离在查询里做，不在结果里做。</strong> 检索后再丢 = 先把别人的数据取出来再扔掉，既浪费又危险。</li>
+      <li><strong>压缩是"多条变一条"，不是把字压扁。</strong> 画像承载稳定约束，事实库承载长尾细节。</li>
+      <li><strong>冷数据要真的移出热索引。</strong> 只靠排序沉降，热索引的负担一点没减。</li>
+      <li><strong>删除要分级，且级联。</strong> KEEP / ARCHIVE / DELETE 三档；硬删必须同时清主库、向量、缓存。</li>
+    </ol>
+    <div class="note">
+      <p><strong>一句话：</strong>存进去是一行代码的事；隔离、压缩、分层、清理，才是要设计的地方。这也正是 P3 那句"难的不是记住，是忘掉"的工程版本。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>I7 划出的工业接口边界</h2>
+    <table>
+      <thead><tr><th>维度</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td><strong>数据关系</strong></td><td>Source / Memory / PreparedContext / Handoff 四者的串联</td></tr>
+        <tr><td><strong>可追溯</strong></td><td>不可变修订、证据引用、生命周期管理</td></tr>
+        <tr><td><strong>接口边界</strong></td><td>Server / Client / Core SDK / HTTP / MCP 各管一段</td></tr>
+        <tr><td><strong>检索契约</strong></td><td>全文、向量、混合检索各自的约定</td></tr>
+      </tbody>
+    </table>
+    <p>D4 讲"从零搭一遍、看懂原理"，I7 讲"工业实现怎么把这些拆成可替换的接口"。一个讲原理，一个讲边界。</p>
+  </section>
+
+  <section>
+    <h2>常用命令</h2>
+    <pre><code>cd ~/easy-data-x-ai/code
+../.venv/bin/python D4/d4_5_multi_user_isolation.py
+../.venv/bin/python D4/d4_8_memory_cleanup.py
+
+# 模型名 404 时：把脚本里的 deepseek-ai/DeepSeek-V3
+# 改成 qwen3.7-flash-2026-07-15，走 DashScope 兼容端点</code></pre>
+  </section>
+
+  <footer class="lesson-foot">
+    <p>Easy Data × AI · 速查表 · 创建于 2026-10-02</p>
+  </footer>
+
+</div>
+</body>
+</html>
