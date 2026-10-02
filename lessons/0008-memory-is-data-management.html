@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 8 课 · 存下来容易，管起来才难</title>
+<link rel="stylesheet" href="../assets/lesson.css">
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="lesson-nav" aria-label="课程导航"><a class="home" href="../index.html">&larr; 学习主页</a><span class="spacer"></span><a href="0007-skill-as-data.html">&larr; 第 7 课</a><a href="../reference/memory-system-cheatsheet.html">速查表 &rarr;</a></nav>
+
+  <header class="lesson-head">
+    <p class="kicker">Easy Data × AI · 第 8 课（对应 Task 8 · D4 + I7）</p>
+    <h1>存下来容易，管起来才难</h1>
+    <p class="objective">学完这一课，你能把一个"会记忆的 Agent"从"能存能取"推进到"能隔离、能压缩、能分层、能清理"——并知道工业实现把这些拆成了哪些接口。</p>
+    <ul class="meta">
+      <li>预计耗时 <b>14 分钟</b></li>
+      <li>关联 <b>d4_1 ~ d4_8</b></li>
+      <li>类型 <b>概念 + 实测 + 工程</b></li>
+    </ul>
+  </header>
+
+  <section>
+    <h2>先接上一课的话头</h2>
+    <p>第 5 课讲记忆系统时留了一句判断：<strong>写入极容易，检索才是难点</strong>。D4 这次干脆把整件事拆成八个脚本，一个个跑给你看：先跑"能存能取"，再跑"存了之后怎么管"。</p>
+    <div class="note">
+      <p><strong>记忆系统的工程量，几乎全在"记住之后"。</strong>存进去是一行代码的事；隔离、压缩、分层、清理，才是要设计的地方。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>先看差距：有没有记忆，体验差在哪</h2>
+    <p>d4_2 和 d4_3 是一组对照。同样四轮对话，差别在第四轮暴露得最彻底。</p>
+    <table>
+      <thead>
+        <tr><th>版本</th><th>第一轮用户说</th><th>第四轮的表现</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>d4_2 无记忆</strong></td><td>我是 Python 开发者，喜欢简洁回答</td><td>"作为 AI 我无法跨会话记忆昨天的对话内容"，用户被迫重新自我介绍</td></tr>
+        <tr><td><strong>d4_3 有记忆</strong></td><td>同上，Agent 存入 3 条记忆</td><td>记得身份与偏好，推荐直接落到"Python 后端 + 简洁"口径</td></tr>
+      </tbody>
+    </table>
+    <p>d4_3 跑完，记忆库里有 5 条：身份两条、偏好一条、项目需求两条。差别不在模型，在<strong>有没有把这两句"记住"</strong>。</p>
+  </section>
+
+  <section>
+    <h2>重头戏在 d4_5 ~ d4_8</h2>
+    <p>如果说 d4_1~d4_3 是"能不能用"，d4_5~d4_8 就是"能不能上生产"。</p>
+    <table>
+      <thead>
+        <tr><th>脚本</th><th>管什么</th><th>关键结论</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>d4_5</strong> 多用户隔离</td><td>记忆不能串到别人身上</td><td>用 <code>user_id</code> 做命名空间，<strong>在查询构建阶段就过滤</strong></td></tr>
+        <tr><td><strong>d4_6</strong> 压缩</td><td>记忆会越存越多</td><td>"多条变一条"换压缩比；画像承载稳定约束，事实库承载长尾</td></tr>
+        <tr><td><strong>d4_7</strong> 冷热分层</td><td>热索引不该被冷数据拖累</td><td>冷数据<strong>必须移出热索引</strong>，不能只靠排序沉底</td></tr>
+        <tr><td><strong>d4_8</strong> 清理</td><td>该忘的必须忘掉</td><td>三级处置 KEEP → ARCHIVE → DELETE；硬删要级联主库/向量/缓存</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <p>d4_5 那条最值得记：<strong>过滤要发生在"查询构建阶段"，而不是"检索完之后再丢弃"。</strong>检索后再丢，等于先把别人的数据取出来再扔掉——既浪费又危险。这类"看起来等价、实则不等价"的实现选择，是分水岭。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>I7 想讲的，是把 D4 放到工业尺度上看</h2>
+    <p>I7（PowerContext 的设计与实现）目前在课程里还标着"开发中"，但它列出的方向已经把边界划清楚了：</p>
+    <ol>
+      <li><strong>数据关系</strong>：Source、Memory、PreparedContext、Handoff 四者怎么串起来</li>
+      <li><strong>可追溯</strong>：不可变修订、证据引用、生命周期管理</li>
+      <li><strong>接口边界</strong>：Server、Client、Core SDK、HTTP、MCP 各管一段</li>
+      <li><strong>检索契约</strong>：全文、向量、混合检索各自的约定</li>
+    </ol>
+    <p>D4 是"我从零搭一遍，看懂原理"；I7 是"工业实现怎么把它拆成可替换的接口"。一个讲原理，一个讲边界。</p>
+  </section>
+
+  <section>
+    <h2>一个顺手的教训：又是模型名</h2>
+    <p class="ask"><span class="label">先自己猜</span>d4_1~d4_4 一上来就报 <code>404 The model `deepseek-ai/DeepSeek-V3` does not exist</code>，你会改代码逻辑，还是先看模型名？</p>
+    <p>这是课程脚本里写死的默认模型名，当前 Key 没有它的权限。改成 <code>qwen3.7-flash-2026-07-15</code>（走 DashScope 兼容端点）后四个脚本全部跑通。<strong>先看报错是不是环境（版本、权限、模型名）问题，再动代码</strong>——这条在第 6、7 课已经吃过两次。</p>
+  </section>
+
+  <section>
+    <h2>自测：三个问题</h2>
+    <p>试着不看上面作答（<strong>提取练习</strong>比重读一遍有效得多）。</p>
+
+    <div class="quiz q" data-answer="2">
+      <p><strong>1. 记忆系统真正的工程量在哪里？</strong></p>
+      <div class="opts">
+        <button>把记忆写进数据库（存下来）</button>
+        <button>让模型生成长度合适的记忆条目</button>
+        <button>存下来之后的隔离、压缩、分层与清理</button>
+      </div>
+      <p class="feedback" hidden></p>
+    </div>
+
+    <div class="quiz q" data-answer="1">
+      <p><strong>2. d4_5 强调隔离要发生在"查询构建阶段"，为什么？</strong></p>
+      <div class="opts">
+        <button>因为检索后再过滤写法更复杂</button>
+        <button>因为检索后再丢会先把别人的数据取出来，既浪费又危险</button>
+        <button>因为数据库不支持在结果集上再过滤</button>
+      </div>
+      <p class="feedback" hidden></p>
+    </div>
+
+    <div class="quiz q" data-answer="0">
+      <p><strong>3. D4 和 I7 的分工是什么？</strong></p>
+      <div class="opts">
+        <button>D4 从零搭一遍讲原理，I7 讲工业实现怎么拆成可替换接口</button>
+        <button>两者讲同一件事，只是 I7 更长</button>
+        <button>D4 讲接口边界，I7 讲从零实现</button>
+      </div>
+      <p class="feedback" hidden></p>
+    </div>
+
+    <p class="ask"><span class="label">提示</span>三题答完再看反馈；答错比答对更有价值：说明那里正是你要补的。</p>
+  </section>
+
+  <section>
+    <h2>接到你的实际场景</h2>
+    <p>把这一课接到自己的 AI 工作流上：</p>
+    <ol>
+      <li><strong>先分清"记忆"和"知识"。</strong> 知识是相对稳定的文档，记忆是不断写入、还要忘掉的数据。两者都要管，但管理方式不同。</li>
+      <li><strong>多用户场景，隔离是第一条红线。</strong> 任何带用户标识的记忆，检索时都要带上那条过滤条件，而且是在查询里带，不是查完再扔。</li>
+      <li><strong>记忆要设计"生命周期"。</strong> 别只想着怎么存，先想清楚什么该 KEEP、什么该 ARCHIVE、什么该 DELETE。</li>
+      <li><strong>报错先分环境还是代码。</strong> 版本冲突、权限、模型名这三类，又占了"跑不通"的一大半。</li>
+    </ol>
+  </section>
+
+  <footer class="lesson-foot">
+    <p>Easy Data × AI · 第 8 课 · 创建于 2026-10-02</p>
+  </footer>
+
+</div>
+</body>
+</html>
